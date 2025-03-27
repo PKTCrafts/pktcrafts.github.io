@@ -28,16 +28,39 @@
         gap: 1rem;
       }
     }
-    .top-bar, .mid-bar, .bottom-bar {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    .main-nav {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
+    @media (min-width: 769px) {
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .top-bar, .mid-bar, .bottom-bar {
+        all: unset;
+      }
+      .main-nav {
+        display: flex;
+        gap: 2rem;
+        margin-left: auto;
+        margin-right: 2rem;
+        align-items: center;
+      }
+      .social-icons {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-left: 1px solid #aaa;
+        padding-left: 1rem;
+      }
+      .social-icons img {
+        width: 16px;
+        height: 16px;
+      }
     }
   </style>
 </head>
