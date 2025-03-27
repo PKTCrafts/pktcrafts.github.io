@@ -4,24 +4,50 @@
   <meta charset="UTF-8">
   <title>PKT Crafts</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 4rem;
-    }
-    h1 {
-      font-size: 2.5rem;
-      color: #00aaff;
-    }
-    a {
-      color: #555;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to PKT Crafts</h1>
-  <p>This is the official site for all things creative.</p>
-  <p><a href="https://www.youtube.com/@pktcrafts" target="_blank">Check out my YouTube channel</a></p>
+  <header>
+    <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
+    <nav>
+      <a href="#">Home</a>
+      <a href="#crafting-for-hope">Crafting for hope</a>
+      <a href="https://instagram.com" target="_blank">📸</a>
+      <a href="https://youtube.com/@pktcrafts" target="_blank">▶️</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h1>Welcome!</h1>
+      <p>My name is Per, and I’m the creator behind PKT Crafts. I’m passionate about making dioramas and a variety of other creative projects.</p>
+      <p>My <a href="https://youtube.com/@pktcrafts" target="_blank">YouTube channel</a> is where I share my love for crafting, with the hope of not only entertaining you but also inspiring you to create something of your own.</p>
+      <p>I enjoy experimenting with different styles and materials, always challenging myself to bring new ideas to life in miniature form.</p>
+      <p>Whether you’re here for the artistry or just curious about the process, I hope my work sparks your imagination!</p>
+    </section>
+
+    <section class="commissions" id="crafting-for-hope">
+      <h2>Commissions</h2>
+      <p>Do you have a diorama project in mind?</p>
+      <p>I'm open for commissions and excited to bring your ideas to life with my artistic skills.</p>
+      <p>Contact me to get started!</p>
+      <p><em>Please note: I always create a video documenting the process of each project. This will naturally extend the time required to complete the work.</em></p>
+
+      <!-- Form kan kobles til for eksempel Formspree senere -->
+      <form action="https://formspree.io/f/mnqwdxgp" method="POST">
+        <input type="text" name="firstName" placeholder="First Name" required>
+        <input type="text" name="lastName" placeholder="Last Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="subject" placeholder="Subject" required>
+        <textarea name="message" placeholder="Message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://instagram.com" target="_blank">📸</a>
+    <a href="https://youtube.com/@pktcrafts" target="_blank">▶️</a>
+  </footer>
 </body>
 </html>
