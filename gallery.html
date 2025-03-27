@@ -19,29 +19,37 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
     }
-    .image-wrapper {
+    .gallery-grid img {
       width: 100%;
       height: 250px;
-      overflow: hidden;
-      position: relative;
+      object-fit: cover;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      cursor: pointer;
     }
-    .image-wrapper img {
-      position: absolute;
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    .image-wrapper:hover img {
-      transform: scale(2);
-      cursor: grab;
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
     }
-    .image-wrapper img:active {
-      cursor: grabbing;
+    .lightbox.active {
+      display: flex;
     }
     h1 {
       text-align: center;
@@ -62,9 +70,15 @@
     <h1>Gallery</h1>
     <div class="gallery-grid" id="gallery"></div>
   </div>
+  <div class="lightbox" id="lightbox">
+    <img src="" alt="Expanded view">
+  </div>
 
   <script>
     const gallery = document.getElementById('gallery');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = lightbox.querySelector('img');
+
     const repoOwner = 'PKTCrafts';
     const repoName = 'pktcrafts.github.io';
     const directoryPath = 'assets/gallery';
@@ -76,19 +90,25 @@
         const data = await response.json();
         data.forEach(file => {
           if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'image-wrapper';
             const img = document.createElement('img');
             img.src = file.download_url;
             img.alt = file.name;
-            wrapper.appendChild(img);
-            gallery.appendChild(wrapper);
+            img.addEventListener('click', () => {
+              lightboxImage.src = file.download_url;
+              lightbox.classList.add('active');
+            });
+            gallery.appendChild(img);
           }
         });
       } catch (error) {
         console.error('Feil ved henting av bilder:', error);
       }
     }
+
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImage.src = '';
+    });
 
     fetchImages();
   </script>
