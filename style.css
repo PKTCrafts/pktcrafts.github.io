@@ -15,7 +15,7 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #fff;
@@ -27,17 +27,34 @@ header {
 
 .logo {
   height: 50px;
+  margin-bottom: 0.5rem;
 }
 
-nav a {
-  margin-left: 1.5rem;
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.main-nav a {
   text-decoration: none;
   color: #222;
   font-weight: 500;
 }
 
-nav a:hover {
+.main-nav a:hover {
   text-decoration: underline;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.social-icons img {
+  width: 16px;
+  height: 16px;
 }
 
 main {
@@ -106,4 +123,21 @@ footer a {
 
 footer a:hover {
   color: #000;
+}
+
+/* Responsiv justering for større skjermer */
+@media (min-width: 600px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .main-nav {
+    margin-bottom: 0;
+  }
+
+  .social-icons {
+    margin-bottom: 0;
+  }
 }
