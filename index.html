@@ -6,29 +6,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="assets/PKT_favicon.png" type="image/png">
+  <style>
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .top-bar, .mid-bar, .bottom-bar {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .top-bar img.logo {
+        height: 50px;
+      }
+      .main-nav {
+        gap: 1rem;
+      }
+    }
+    .top-bar, .mid-bar, .bottom-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .main-nav {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <a href="#">
-      <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
-    </a>
-    <nav class="main-nav">
+    <div class="top-bar">
+      <a href="#">
+        <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
+      </a>
+      <div class="social-icons">
+        <a href="https://youtube.com/@pktcrafts" target="_blank">
+          <img src="assets/YT_favicon.png" alt="YouTube">
+        </a>
+        <a href="https://www.instagram.com/pkt_crafts/" target="_blank">
+          <img src="assets/IG_favicon.png" alt="Instagram">
+        </a>
+        <a href="https://www.patreon.com/c/PKTCrafts" target="_blank">
+          <img src="assets/Patreon_favicon.png" alt="Patreon">
+        </a>
+      </div>
+    </div>
+    <div class="mid-bar main-nav">
       <a href="#">Home</a>
       <a href="#contact">Contact</a>
       <a href="#gallery">Gallery</a>
-      <a href="https://www.crafting-for-hope.com/" target="_blank">Crafting For Hope</a>
       <a href="https://pktcrafts.creator-spring.com" target="_blank">Shop</a>
-    </nav>
-    <div class="social-icons">
-      <a href="https://youtube.com/@pktcrafts" target="_blank">
-        <img src="assets/YT_favicon.png" alt="YouTube">
-      </a>
-      <a href="https://www.instagram.com/pkt_crafts/" target="_blank">
-        <img src="assets/IG_favicon.png" alt="Instagram">
-      </a>
-      <a href="https://www.patreon.com/c/PKTCrafts" target="_blank">
-        <img src="assets/Patreon_favicon.png" alt="Patreon">
-      </a>
+    </div>
+    <div class="bottom-bar main-nav">
+      <a href="https://www.crafting-for-hope.com/" target="_blank">Crafting For Hope</a>
     </div>
   </header>
 
@@ -43,7 +81,8 @@
 
     <!-- GALLERY SECTION -->
     <section class="gallery-container" id="gallery">
-      <h1>Gallery</h1>
+      <h2 style="text-align: left;">Gallery</h2>
+      <p class="gallery-description">Here’s a little peek at some of the projects I’ve worked on in the past.</p>
       <div class="gallery-grid" id="gallery-grid"></div>
     </section>
     <div class="lightbox" id="lightbox">
@@ -51,7 +90,7 @@
     </div>
 
     <section class="contact" id="contact">
-      <h1>Contact</h1>
+      <h2>Contact</h2>
       <p>Got a question, idea, or just want to say hi?</p>
       <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
       <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out using the form below.</p>
@@ -116,60 +155,5 @@
 
     fetchImages();
   </script>
-
-  <style>
-    .gallery-container {
-      max-width: 1000px;
-      margin: 4rem auto;
-      padding: 0 1rem;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .gallery-grid img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-    .gallery-grid img:hover {
-      transform: scale(1.03);
-    }
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-    .lightbox.active {
-      display: flex;
-    }
-    .gallery-container h2 {
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-    .gallery-description {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 1rem;
-      color: #444;
-    }
-  </style>
 </body>
 </html>
