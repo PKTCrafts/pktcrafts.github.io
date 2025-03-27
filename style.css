@@ -8,7 +8,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
+  background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
   color: #222;
   padding: 0 1rem;
 }
@@ -26,7 +26,7 @@ header {
 }
 
 .logo {
-  height: 70px; /* Økt størrelse for desktop */
+  height: 80px; /* Økt størrelse for desktop */
 }
 
 nav.main-nav {
@@ -34,6 +34,7 @@ nav.main-nav {
   gap: 2rem;
   margin-left: auto;
   margin-right: 2rem;
+  align-items: center;
 }
 
 nav.main-nav a {
@@ -48,7 +49,10 @@ nav.main-nav a:hover {
 
 .social-icons {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+  border-left: 1px solid #aaa;
+  padding-left: 1rem;
 }
 
 .social-icons img {
@@ -69,7 +73,6 @@ h1, h2 {
 .intro {
   padding-bottom: 2rem;
   border-bottom: 1px solid #ccc;
-  background: linear-gradient(to bottom, #fff, #f1f1f1);
 }
 
 .intro p,
@@ -138,5 +141,9 @@ footer a:hover {
   nav.main-nav {
     gap: 1rem;
     margin-right: 1rem;
+  }
+
+  .social-icons {
+    padding-left: 0.5rem;
   }
 }
