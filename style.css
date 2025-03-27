@@ -8,14 +8,14 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background-color: #f9f9f9;
+  background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
   color: #222;
   padding: 0 1rem;
 }
 
 header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #fff;
@@ -26,30 +26,29 @@ header {
 }
 
 .logo {
-  height: 50px;
-  margin-bottom: 0.5rem;
+  height: 70px; /* Økt størrelse for desktop */
 }
 
-.main-nav {
+nav.main-nav {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 0.5rem;
+  gap: 2rem;
+  margin-left: auto;
+  margin-right: 2rem;
 }
 
-.main-nav a {
+nav.main-nav a {
   text-decoration: none;
   color: #222;
   font-weight: 500;
 }
 
-.main-nav a:hover {
+nav.main-nav a:hover {
   text-decoration: underline;
 }
 
 .social-icons {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
 }
 
 .social-icons img {
@@ -67,8 +66,14 @@ h1, h2 {
   color: #000;
 }
 
+.intro {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #ccc;
+  background: linear-gradient(to bottom, #fff, #f1f1f1);
+}
+
 .intro p,
-.commissions p {
+.contact p {
   margin-bottom: 1rem;
 }
 
@@ -125,20 +130,13 @@ footer a:hover {
   color: #000;
 }
 
-/* Responsiv justering for større skjermer */
-@media (min-width: 600px) {
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+@media (max-width: 768px) {
+  .logo {
+    height: 50px;
   }
 
-  .main-nav {
-    margin-bottom: 0;
-  }
-
-  .social-icons {
-    margin-bottom: 0;
+  nav.main-nav {
+    gap: 1rem;
+    margin-right: 1rem;
   }
 }
-
