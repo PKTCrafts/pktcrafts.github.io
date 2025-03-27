@@ -7,89 +7,125 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="assets/PKT_favicon.png" type="image/png">
   <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+    .logo {
+      height: 80px;
+    }
+    .main-nav {
+      display: flex;
+      gap: 2rem;
+      margin-left: auto;
+      margin-right: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 1px solid #aaa;
+      padding-left: 1rem;
+    }
+    .social-icons img {
+      width: 16px;
+      height: 16px;
+    }
+    .gallery-container {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 1rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .lightbox.active {
+      display: flex;
+    }
     @media (max-width: 768px) {
       header {
         flex-direction: column;
         align-items: flex-start;
       }
-      .top-bar, .mid-bar, .bottom-bar {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+      .main-nav {
+        margin: 0;
+        gap: 1rem;
+        padding-top: 0.5rem;
       }
-      .top-bar img.logo {
+      .logo {
         height: 50px;
       }
-      .main-nav {
-        gap: 1rem;
-      }
-    }
-    @media (min-width: 769px) {
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background-color: #fff;
-        border-bottom: 1px solid #ddd;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .top-bar, .mid-bar, .bottom-bar {
-        all: unset;
-      }
-      .main-nav {
-        display: flex;
-        gap: 2rem;
-        margin-left: auto;
-        margin-right: 2rem;
-        align-items: center;
-      }
       .social-icons {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        border-left: 1px solid #aaa;
-        padding-left: 1rem;
-      }
-      .social-icons img {
-        width: 16px;
-        height: 16px;
+        margin-top: 0.5rem;
+        border-left: none;
+        padding-left: 0;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="top-bar">
-      <a href="#">
-        <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
-      </a>
-      <div class="social-icons">
-        <a href="https://youtube.com/@pktcrafts" target="_blank">
-          <img src="assets/YT_favicon.png" alt="YouTube">
-        </a>
-        <a href="https://www.instagram.com/pkt_crafts/" target="_blank">
-          <img src="assets/IG_favicon.png" alt="Instagram">
-        </a>
-        <a href="https://www.patreon.com/c/PKTCrafts" target="_blank">
-          <img src="assets/Patreon_favicon.png" alt="Patreon">
-        </a>
-      </div>
-    </div>
-    <div class="mid-bar main-nav">
+    <a href="#">
+      <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
+    </a>
+    <nav class="main-nav">
       <a href="#">Home</a>
       <a href="#contact">Contact</a>
       <a href="#gallery">Gallery</a>
-      <a href="https://pktcrafts.creator-spring.com" target="_blank">Shop</a>
-    </div>
-    <div class="bottom-bar main-nav">
       <a href="https://www.crafting-for-hope.com/" target="_blank">Crafting For Hope</a>
+      <a href="https://pktcrafts.creator-spring.com" target="_blank">Shop</a>
+    </nav>
+    <div class="social-icons">
+      <a href="https://youtube.com/@pktcrafts" target="_blank">
+        <img src="assets/YT_favicon.png" alt="YouTube">
+      </a>
+      <a href="https://www.instagram.com/pkt_crafts/" target="_blank">
+        <img src="assets/IG_favicon.png" alt="Instagram">
+      </a>
+      <a href="https://www.patreon.com/c/PKTCrafts" target="_blank">
+        <img src="assets/Patreon_favicon.png" alt="Patreon">
+      </a>
     </div>
   </header>
 
