@@ -41,6 +41,9 @@
       align-items: center;
       flex-wrap: wrap;
     }
+    .main-nav.hidden {
+      display: none !important;
+    }
     .main-nav.active {
       display: flex !important;
     }
@@ -55,65 +58,6 @@
       width: 16px;
       height: 16px;
     }
-    .gallery-container {
-      max-width: 1000px;
-      margin: 4rem auto;
-      padding: 0 1rem;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .gallery-grid img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-    .gallery-grid img:hover {
-      transform: scale(1.03);
-    }
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-    .lightbox.active {
-      display: flex;
-    }
-    .contact-container {
-      display: flex;
-      flex-direction: row;
-      gap: 2rem;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-    .contact form {
-      flex: 1;
-      min-width: 300px;
-    }
-    .store-embed {
-      flex: 1;
-      min-width: 300px;
-      max-width: 500px;
-      margin-top: 32px;
-    }
     @media (max-width: 768px) {
       .main-nav {
         display: none;
@@ -121,6 +65,9 @@
         width: 100%;
         gap: 1rem;
         margin-top: 1rem;
+      }
+      .main-nav.active {
+        display: flex !important;
       }
       .hamburger {
         display: flex;
@@ -133,9 +80,6 @@
         border-left: none;
         padding-left: 0;
       }
-      .contact-container {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
@@ -144,12 +88,12 @@
     <a href="#">
       <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
     </a>
-    <div class="hamburger" onclick="document.querySelector('.main-nav').classList.toggle('active')">
+    <div class="hamburger" onclick="toggleMenu()">
       <div></div>
       <div></div>
       <div></div>
     </div>
-    <nav class="main-nav">
+    <nav class="main-nav hidden">
       <a href="#">Home</a>
       <a href="#contact">Contact</a>
       <a href="#gallery">Gallery</a>
@@ -169,151 +113,11 @@
     </div>
   </header>
 
-  <main>
-    <section class="intro">
-      <h1>Welcome!</h1>
-      <p>My name is Per, and I’m the creator behind PKT Crafts. I’m passionate about making dioramas and a variety of other creative projects.</p>
-      <p>My <a href="https://youtube.com/@pktcrafts" target="_blank">YouTube channel</a> is where I share my love for crafting, with the hope of not only entertaining you but also inspiring you to create something of your own.</p>
-      <p>I enjoy experimenting with different styles and materials, always challenging myself to bring new ideas to life in miniature form.</p>
-      <p>Whether you’re here for the artistry or just curious about the process, I hope my work sparks your imagination!</p>
-    </section>
-
-    <section class="gallery-container" id="gallery">
-      <h2 style="text-align: left;">Gallery</h2>
-      <p class="gallery-description">A small selection of what I’ve been working on in recent years.</p>
-      <div class="gallery-grid" id="gallery-grid"></div>
-    </section>
-    <div class="lightbox" id="lightbox">
-      <img src="" alt="Expanded view">
-    </div>
-
-    <section class="contact" id="contact">
-      <h2>Contact</h2>
-      <p>Got a question, idea, or just want to say hi?</p>
-      <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
-      <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out using the form below.</p>
-      <p><em>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</em></p>
-
-      <div class="contact-container">
-        <form action="https://formsubmit.co/pktcraftscontact@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="New message from PKT Crafts!">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://pktcrafts.com/thanks.html">
-
-          <input type="text" name="firstName" placeholder="First Name" required>
-          <input type="text" name="lastName" placeholder="Last Name" required>
-          <input type="email" name="email" placeholder="Email" required>
-          <input type="text" name="subject" placeholder="Subject" required>
-          <textarea name="message" placeholder="Message" rows="5" required></textarea>
-
-          <button type="submit">Send</button>
-        </form>
-
-        <div class="store-embed">
-          
-          <iframe
-  style="border-radius:24px;border:none"
-  src="https://embed.creator-spring.com/widget?slug=pktcrafts&per=3&currency=&page=1&layout=grid-sm-4&theme=light"
-  title="PKTCrafts Merch store"
-  width="96%"
-  height="399"
-  scrolling="no"
-  data-reactroot="">
-</iframe>
-
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 PKT Crafts. All rights reserved.</p>
-  </footer>
-
-<script>
-  const hamburger = document.querySelector('.hamburger');
-  const mainNav = document.querySelector('.main-nav');
-
-  hamburger.addEventListener('click', () => {
-    mainNav.classList.toggle('active');
-  });
-
-  const gallery = document.getElementById('gallery-grid');
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImage = lightbox.querySelector('img');
-
-  const repoOwner = 'PKTCrafts';
-  const repoName = 'pktcrafts.github.io';
-  const directoryPath = 'assets/gallery';
-
-  async function fetchImages() {
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      data.forEach(file => {
-        if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
-          const img = document.createElement('img');
-          img.src = file.download_url;
-          img.alt = file.name;
-          img.addEventListener('click', () => {
-            lightboxImage.src = file.download_url;
-            lightbox.classList.add('active');
-          });
-          gallery.appendChild(img);
-        }
-      });
-    } catch (error) {
-      console.error('Feil ved henting av bilder:', error);
-    }
-  }
-
-  lightbox.addEventListener('click', () => {
-    lightbox.classList.remove('active');
-    lightboxImage.src = '';
-  });
-
-  fetchImages();
-</script>
-  
   <script>
-    const gallery = document.getElementById('gallery-grid');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = lightbox.querySelector('img');
-
-    const repoOwner = 'PKTCrafts';
-    const repoName = 'pktcrafts.github.io';
-    const directoryPath = 'assets/gallery';
-
-    async function fetchImages() {
-      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        data.forEach(file => {
-          if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
-            const img = document.createElement('img');
-            img.src = file.download_url;
-            img.alt = file.name;
-            img.addEventListener('click', () => {
-              lightboxImage.src = file.download_url;
-              lightbox.classList.add('active');
-            });
-            gallery.appendChild(img);
-          }
-        });
-      } catch (error) {
-        console.error('Feil ved henting av bilder:', error);
-      }
+    function toggleMenu() {
+      const nav = document.querySelector('.main-nav');
+      nav.classList.toggle('hidden');
     }
-
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImage.src = '';
-    });
-
-    fetchImages();
   </script>
 </body>
 </html>
