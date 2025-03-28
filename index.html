@@ -58,6 +58,65 @@
       width: 16px;
       height: 16px;
     }
+    .gallery-container {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 1rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .contact-container {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .contact form {
+      flex: 1;
+      min-width: 300px;
+    }
+    .store-embed {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      margin-top: 32px;
+    }
     @media (max-width: 768px) {
       .main-nav {
         display: none;
@@ -79,6 +138,9 @@
         margin-top: 0.5rem;
         border-left: none;
         padding-left: 0;
+      }
+      .contact-container {
+        flex-direction: column;
       }
     }
   </style>
@@ -113,11 +175,85 @@
     </div>
   </header>
 
+  <main>
+    <section class="gallery-container" id="gallery">
+      <h2 style="text-align: left;">Gallery</h2>
+      <p class="gallery-description">A small selection of what I’ve been working on in recent years.</p>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </section>
+    <div class="lightbox" id="lightbox">
+      <img src="" alt="Expanded view">
+    </div>
+
+    <section class="contact" id="contact">
+      <h2>Contact</h2>
+      <div class="contact-container">
+        <form action="https://formsubmit.co/pktcraftscontact@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New message from PKT Crafts!">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://pktcrafts.com/thanks.html">
+          <input type="text" name="firstName" placeholder="First Name" required>
+          <input type="text" name="lastName" placeholder="Last Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="text" name="subject" placeholder="Subject" required>
+          <textarea name="message" placeholder="Message" rows="5" required></textarea>
+          <button type="submit">Send</button>
+        </form>
+
+        <div class="store-embed">
+          <iframe style="border-radius:24px;border:none" src="https://embed.creator-spring.com/widget?slug=pktcrafts&per=3&currency=&page=1&layout=grid-sm-4&theme=light" title="PKTCrafts Merch store" width="96%" height="399" scrolling="no" data-reactroot=""></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 PKT Crafts. All rights reserved.</p>
+  </footer>
+
   <script>
     function toggleMenu() {
       const nav = document.querySelector('.main-nav');
       nav.classList.toggle('hidden');
     }
+
+    const gallery = document.getElementById('gallery-grid');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = lightbox.querySelector('img');
+
+    const repoOwner = 'PKTCrafts';
+    const repoName = 'pktcrafts.github.io';
+    const directoryPath = 'assets/gallery';
+
+    async function fetchImages() {
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        data.forEach(file => {
+          if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+            const img = document.createElement('img');
+            img.src = file.download_url;
+            img.alt = file.name;
+            img.addEventListener('click', () => {
+              lightboxImage.src = file.download_url;
+              lightbox.classList.add('active');
+            });
+            gallery.appendChild(img);
+          }
+        });
+      } catch (error) {
+        console.error('Feil ved henting av bilder:', error);
+      }
+    }
+
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightboxImage.src = '';
+    });
+
+    fetchImages();
   </script>
 </body>
 </html>
