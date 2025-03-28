@@ -222,6 +222,52 @@
     <p>© 2025 PKT Crafts. All rights reserved.</p>
   </footer>
 
+<script>
+  const hamburger = document.querySelector('.hamburger');
+  const mainNav = document.querySelector('.main-nav');
+
+  hamburger.addEventListener('click', () => {
+    mainNav.classList.toggle('active');
+  });
+
+  const gallery = document.getElementById('gallery-grid');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = lightbox.querySelector('img');
+
+  const repoOwner = 'PKTCrafts';
+  const repoName = 'pktcrafts.github.io';
+  const directoryPath = 'assets/gallery';
+
+  async function fetchImages() {
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      data.forEach(file => {
+        if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+          const img = document.createElement('img');
+          img.src = file.download_url;
+          img.alt = file.name;
+          img.addEventListener('click', () => {
+            lightboxImage.src = file.download_url;
+            lightbox.classList.add('active');
+          });
+          gallery.appendChild(img);
+        }
+      });
+    } catch (error) {
+      console.error('Feil ved henting av bilder:', error);
+    }
+  }
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+    lightboxImage.src = '';
+  });
+
+  fetchImages();
+</script>
+  
   <script>
     const gallery = document.getElementById('gallery-grid');
     const lightbox = document.getElementById('lightbox');
