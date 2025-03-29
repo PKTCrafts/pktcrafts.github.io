@@ -268,5 +268,44 @@
 
     fetchImages();
   </script>
+    <script>
+  const API_KEY = 'AIzaSyDhvfUx579Uto0advGjbE3w3w7vOiFxb9k';
+  const SHEET_ID = '1tc2rkVgUxJLij34akTnioJG2x0sIwvtPMKt_MrogXcQ';
+  const SHEET_NAME = 'Logg';
+
+  function logClick(action, elementId) {
+    const timestamp = new Date().toISOString();
+    const values = [[timestamp, action, elementId]];
+    const body = JSON.stringify({ values });
+
+    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:C1:append?valueInputOption=RAW&key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    }).then(res => {
+      if (!res.ok) console.error('Log failed:', res.statusText);
+    }).catch(err => console.error('Error logging click:', err));
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.gallery-grid img').forEach((img, i) => {
+      img.addEventListener('click', () => {
+        logClick('Gallery image clicked', `gallery-img-${i + 1}`);
+      });
+    });
+
+    document.querySelectorAll('.main-nav a').forEach((link) => {
+      link.addEventListener('click', () => {
+        logClick('Nav link clicked', link.textContent.trim());
+      });
+    });
+
+    document.querySelectorAll('.social-icons a').forEach((iconLink) => {
+      iconLink.addEventListener('click', () => {
+        logClick('Social icon clicked', iconLink.href);
+      });
+    });
+  });
+</script>
 </body>
 </html>
