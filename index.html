@@ -7,7 +7,142 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="assets/PKT_favicon.png" type="image/png">
   <style>
-    /* Din eksisterende CSS her */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+    .logo {
+      height: 80px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #333;
+    }
+    .main-nav {
+      display: flex;
+      gap: 2rem;
+      margin-left: auto;
+      margin-right: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .main-nav.hidden {
+      display: none !important;
+    }
+    .main-nav.active {
+      display: flex !important;
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 1px solid #aaa;
+      padding-left: 1rem;
+    }
+    .social-icons img {
+      width: 16px;
+      height: 16px;
+    }
+    .gallery-container {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 1rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .contact-container {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .contact form {
+      flex: 1;
+      min-width: 300px;
+    }
+    .store-embed {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      margin-top: 32px;
+    }
+    @media (max-width: 768px) {
+      .main-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .main-nav.active {
+        display: flex !important;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .logo {
+        height: 50px;
+      }
+      .social-icons {
+        margin-top: 0.5rem;
+        border-left: none;
+        padding-left: 0;
+      }
+      .contact-container {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
@@ -48,7 +183,8 @@
       <p>I enjoy experimenting with different styles and materials, always challenging myself to bring new ideas to life in miniature form.</p>
       <p>Whether you’re here for the artistry or just curious about the process, I hope my work sparks your imagination!</p>
     </section>
-
+  
+  <main>
     <section class="gallery-container" id="gallery">
       <h2 style="text-align: left;">Gallery</h2>
       <p class="gallery-description">A small selection of what I’ve been working on in recent years.</p>
@@ -70,7 +206,6 @@
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="https://pktcrafts.com/thanks.html">
-          <input type="text" name="_honey" class="honeypot">
           <input type="text" name="firstName" placeholder="First Name" required>
           <input type="text" name="lastName" placeholder="Last Name" required>
           <input type="email" name="email" placeholder="Email" required>
@@ -105,7 +240,7 @@
     const directoryPath = 'assets/gallery';
 
     async function fetchImages() {
-      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
+      const apiUrl = https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath};
       try {
         const response = await fetch(apiUrl);
         const data = await response.json();
@@ -131,7 +266,39 @@
       lightboxImage.src = '';
     });
 
-    fetchImages();
+  fetchImages();
+
+    const API_KEY = 'AIzaSyCjETzdhF7DRrPQAKaPWtF0yS5xoSeluf8';
+    const SHEET_ID = '1tc2rkVgUxJLij34akTnioJG2x0sIwvtPMKt_MrogXcQ';
+    const SHEET_NAME = 'Logg';
+
+    function logClick(action, elementId) {
+      const timestamp = new Date().toISOString();
+      const values = [[timestamp, action, elementId]];
+      const body = JSON.stringify({ values });
+
+      fetch(https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:C1:append?valueInputOption=RAW&key=${API_KEY}, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body
+      }).then(res => {
+        if (!res.ok) console.error('Log failed:', res.statusText);
+      }).catch(err => console.error('Error logging click:', err));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.main-nav a').forEach((link) => {
+        link.addEventListener('click', () => {
+          logClick('Nav link clicked', link.textContent.trim());
+        });
+      });
+
+      document.querySelectorAll('.social-icons a').forEach((iconLink) => {
+        iconLink.addEventListener('click', () => {
+          logClick('Social icon clicked', iconLink.href);
+        });
+      });
+    });
   </script>
 </body>
 </html>
