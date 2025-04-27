@@ -62,38 +62,49 @@
       width: 16px;
       height: 16px;
     }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+    .product-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 1rem;
     }
-    .product-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      background-color: #fff;
-    }
-    .product-card:hover {
-      transform: scale(1.02);
-    }
-    .product-card img {
+    .product-detail img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      margin-bottom: 2rem;
     }
-    .product-info {
-      padding: 1rem;
+    .product-detail h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
-    .product-info h3 {
-      margin: 0 0 0.5rem;
+    .product-detail p.description {
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 2rem;
     }
-    .product-info p {
-      margin: 0;
+    .product-detail .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .product-detail .price span {
+      color: #00a5cf;
+      font-size: 2rem;
+      display: block;
+    }
+    .add-to-cart {
+      padding: 1rem 2rem;
+      background-color: #222;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      font-weight: bold;
+      cursor: pointer;
     }
     footer {
       text-align: center;
@@ -130,22 +141,17 @@
   </header>
 
   <main>
-    <section>
-      <h1 style="text-align: center; margin-top: 2rem;">Diorama Shop</h1>
-      <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem;">Below you'll find a selection of one-of-a-kind handmade dioramas available for purchase. Each piece is crafted with care and creativity. If something catches your eye, act fast – once it's gone, it's gone!</p>
-
-      <div class="product-grid">
-        <div class="product-card">
-          <a href="produkt/treasure-hunter.html">
-            <img src="https://raw.githubusercontent.com/PKTCrafts/pktcrafts.github.io/main/assets/gallery/Treasure%20hunter.jpg" alt="The Treasure Hunter Diorama">
-            <div class="product-info">
-              <h3>The Treasure Hunter</h3>
-              <p>Kr 1 800</p>
-            </div>
-          </a>
-        </div>
-        <!-- Add more products as needed -->
+    <section class="product-detail">
+      <a href="https://raw.githubusercontent.com/PKTCrafts/pktcrafts.github.io/main/assets/gallery/Treasure%20hunter.jpg" target="_blank">
+        <img src="https://raw.githubusercontent.com/PKTCrafts/pktcrafts.github.io/main/assets/gallery/Treasure%20hunter.jpg" alt="The Treasure Hunter Diorama">
+      </a>
+      <h1>The Treasure Hunter</h1>
+      <p class="description">One-of-a-kind handmade diorama with internal lighting to emphasize the object source lighting.</p>
+      <div class="price">
+        Prize
+        <span>3000.00 NOK</span>
       </div>
+      <button class="add-to-cart">Add to cart</button>
     </section>
   </main>
 
