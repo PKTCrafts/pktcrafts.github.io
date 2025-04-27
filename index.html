@@ -27,17 +27,6 @@
     .logo {
       height: 80px;
     }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 4px;
-    }
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: #333;
-    }
     .main-nav {
       display: flex;
       gap: 2rem;
@@ -102,33 +91,52 @@
       flex-direction: row;
       padding: 2rem;
       border-radius: 12px;
-      max-width: 800px;
+      max-width: 900px;
       width: 90%;
       position: relative;
     }
-    .modal-left img {
+    .modal-left {
+      width: 50%;
+      aspect-ratio: 1 / 1;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #modalImage {
       max-width: 100%;
-      height: auto;
+      max-height: 100%;
+      object-fit: contain;
       border-radius: 8px;
     }
     .modal-right {
-      margin-left: 2rem;
+      width: 50%;
+      padding-left: 2rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
     }
     .modal-right h2 {
-      margin-top: 0;
+      margin: 0 0 1rem;
     }
     .price {
       font-size: 1.5rem;
       color: #00a5cf;
-      margin-top: 1rem;
+      margin: 1rem 0;
+    }
+    .add-to-cart {
+      padding: 0.75rem 1rem;
+      background-color: #222;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
     }
     .close-button {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 0.5rem;
+      right: 0.5rem;
       font-size: 2rem;
       cursor: pointer;
     }
@@ -136,8 +144,11 @@
       .product-modal-content {
         flex-direction: column;
       }
+      .modal-left, .modal-right {
+        width: 100%;
+        padding: 0;
+      }
       .modal-right {
-        margin-left: 0;
         margin-top: 1rem;
       }
     }
@@ -184,6 +195,7 @@
           <h2 id="modalTitle"></h2>
           <p id="modalDescription"></p>
           <p class="price" id="modalPrice"></p>
+          <button class="add-to-cart">Add to cart</button>
         </div>
       </div>
     </div>
@@ -210,12 +222,11 @@
         price: "2200 NOK",
         description: "Mini-diorama capturing Boromir’s final moment in The Lord of the Rings."
       }
-      // Add more products as needed
     };
 
     function openProductModal(filename, imgSrc) {
       const product = products[filename];
-      if (!product) return; // fallback: do nothing if not found
+      if (!product) return;
 
       document.getElementById('modalImage').src = imgSrc;
       document.getElementById('modalTitle').innerText = product.title;
