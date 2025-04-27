@@ -240,7 +240,7 @@
     const directoryPath = 'assets/gallery';
 
     async function fetchImages() {
-      const apiUrl = https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath};
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
       try {
         const response = await fetch(apiUrl);
         const data = await response.json();
