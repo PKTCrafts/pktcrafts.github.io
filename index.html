@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PKT Crafts</title>
+  <title>Shop | PKT Crafts</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="assets/PKT_favicon.png" type="image/png">
   <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
     header {
       display: flex;
       justify-content: space-between;
@@ -41,11 +46,10 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    .main-nav.hidden {
-      display: none !important;
-    }
-    .main-nav.active {
-      display: flex !important;
+    .main-nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
     }
     .social-icons {
       display: flex;
@@ -80,88 +84,74 @@
     .gallery-grid img:hover {
       transform: scale(1.03);
     }
-    .lightbox {
+    .product-modal {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
-      z-index: 1000;
+      z-index: 2000;
     }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-    .lightbox.active {
-      display: flex;
-    }
-    .contact-container {
+    .product-modal-content {
+      background: #fff;
       display: flex;
       flex-direction: row;
-      gap: 2rem;
-      align-items: flex-start;
-      flex-wrap: wrap;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 90%;
+      position: relative;
     }
-    .contact form {
-      flex: 1;
-      min-width: 300px;
+    .modal-left img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
     }
-    .store-embed {
-      flex: 1;
-      min-width: 300px;
-      max-width: 500px;
-      margin-top: 32px;
+    .modal-right {
+      margin-left: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    .honeypot {
-      display: none !important;
+    .modal-right h2 {
+      margin-top: 0;
+    }
+    .price {
+      font-size: 1.5rem;
+      color: #00a5cf;
+      margin-top: 1rem;
+    }
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 2rem;
+      cursor: pointer;
     }
     @media (max-width: 768px) {
-      .main-nav {
-        display: none;
+      .product-modal-content {
         flex-direction: column;
-        width: 100%;
-        gap: 1rem;
+      }
+      .modal-right {
+        margin-left: 0;
         margin-top: 1rem;
-      }
-      .main-nav.active {
-        display: flex !important;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .logo {
-        height: 50px;
-      }
-      .social-icons {
-        margin-top: 0.5rem;
-        border-left: none;
-        padding-left: 0;
-      }
-      .contact-container {
-        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="#">
+    <a href="index.html">
       <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
     </a>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
     <nav class="main-nav">
-      <a href="#">Home</a>
-      <a href="#contact">Contact</a>
-      <a href="#gallery">Gallery</a>
+      <a href="index.html">Home</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="index.html#gallery">Gallery</a>
       <a href="https://www.crafting-for-hope.com/" target="_blank">Crafting For Hope</a>
       <a href="shop.html">Shop</a>
     </nav>
@@ -179,49 +169,24 @@
   </header>
 
   <main>
-    <section class="intro">
-      <h1>Welcome!</h1>
-      <p>My name is Per, and I’m the guy behind PKT Crafts. I’m passionate about making dioramas and a variety of other creative projects.</p>
-      <p>My <a href="https://youtube.com/@pktcrafts" target="_blank">YouTube channel</a> is where I share my love for crafting, with the hope of not only entertaining you but also inspiring you to create something of your own.</p>
-      <p>I enjoy experimenting with different styles and materials, always challenging myself to bring new ideas to life in miniature form.</p>
-      <p>Whether you’re here for the artistry or just curious about the process, I hope my work sparks your imagination!</p>
-    </section>
-  
     <section class="gallery-container" id="gallery">
       <h2 style="text-align: left;">Gallery</h2>
       <p class="gallery-description">A small selection of what I’ve been working on in recent years.</p>
       <div class="gallery-grid" id="gallery-grid"></div>
     </section>
-    <div class="lightbox" id="lightbox">
-      <img src="" alt="Expanded view">
-    </div>
-
-    <section class="contact" id="contact">
-      <h2>Contact</h2>
-      <p class="contact-description">Got a question, idea, or just want to say hi?</p>
-      <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
-      <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out using the form below.</p>
-      <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
-      <div class="contact-container">
-        <form action="https://formsubmit.co/pktcraftscontact@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="New message from PKT Crafts!">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://pktcrafts.com/thanks.html">
-          <input type="text" name="_honey" class="honeypot">
-          <input type="text" name="firstName" placeholder="First Name" required>
-          <input type="text" name="lastName" placeholder="Last Name" required>
-          <input type="email" name="email" placeholder="Email" required>
-          <input type="text" name="subject" placeholder="Subject" required>
-          <textarea name="message" placeholder="Message" rows="5" required></textarea>
-          <button type="submit">Send</button>
-        </form>
-
-        <div class="store-embed">
-          <iframe style="border-radius:24px;border:none" src="https://embed.creator-spring.com/widget?slug=pktcrafts&per=3&currency=&page=1&layout=grid-sm-4&theme=light" title="PKTCrafts Merch store" width="96%" height="399" scrolling="no" data-reactroot=""></iframe>
+    <div class="product-modal" id="productModal">
+      <div class="product-modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <div class="modal-left">
+          <img id="modalImage" src="" alt="">
+        </div>
+        <div class="modal-right">
+          <h2 id="modalTitle"></h2>
+          <p id="modalDescription"></p>
+          <p class="price" id="modalPrice"></p>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>
@@ -229,15 +194,41 @@
   </footer>
 
   <script>
-    function toggleMenu() {
-      const nav = document.querySelector('.main-nav');
-      nav.classList.toggle('hidden');
+    const products = {
+      "Treasure hunter.jpg": {
+        title: "The Treasure Hunter",
+        price: "3000 NOK",
+        description: "One-of-a-kind handmade diorama with internal lighting to emphasize the object source lighting."
+      },
+      "AT-ST.jpg": {
+        title: "AT-ST Diorama",
+        price: "2400 NOK",
+        description: "Battle-worn walker in an Endor-themed forest base."
+      },
+      "Boromir_2.png": {
+        title: "Boromir's Last Stand",
+        price: "2200 NOK",
+        description: "Mini-diorama capturing Boromir’s final moment in The Lord of the Rings."
+      }
+      // Add more products as needed
+    };
+
+    function openProductModal(filename, imgSrc) {
+      const product = products[filename];
+      if (!product) return; // fallback: do nothing if not found
+
+      document.getElementById('modalImage').src = imgSrc;
+      document.getElementById('modalTitle').innerText = product.title;
+      document.getElementById('modalDescription').innerText = product.description;
+      document.getElementById('modalPrice').innerText = product.price;
+      document.getElementById('productModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('productModal').style.display = 'none';
     }
 
     const gallery = document.getElementById('gallery-grid');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = lightbox.querySelector('img');
-
     const repoOwner = 'PKTCrafts';
     const repoName = 'pktcrafts.github.io';
     const directoryPath = 'assets/gallery';
@@ -253,8 +244,14 @@
             img.src = file.download_url;
             img.alt = file.name;
             img.addEventListener('click', () => {
-              lightboxImage.src = file.download_url;
-              lightbox.classList.add('active');
+              if (products[file.name]) {
+                openProductModal(file.name, file.download_url);
+              } else {
+                const lightbox = document.getElementById('lightbox');
+                const lightboxImage = lightbox.querySelector('img');
+                lightboxImage.src = file.download_url;
+                lightbox.classList.add('active');
+              }
             });
             gallery.appendChild(img);
           }
@@ -264,44 +261,19 @@
       }
     }
 
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightboxImage.src = '';
-    });
-
     fetchImages();
 
-    const API_KEY = 'AIzaSyCjETzdhF7DRrPQAKaPWtF0yS5xoSeluf8';
-    const SHEET_ID = '1tc2rkVgUxJLij34akTnioJG2x0sIwvtPMKt_MrogXcQ';
-    const SHEET_NAME = 'Logg';
-
-    function logClick(action, elementId) {
-      const timestamp = new Date().toISOString();
-      const values = [[timestamp, action, elementId]];
-      const body = JSON.stringify({ values });
-
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:C1:append?valueInputOption=RAW&key=${API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body
-      }).then(res => {
-        if (!res.ok) console.error('Log failed:', res.statusText);
-      }).catch(err => console.error('Error logging click:', err));
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.main-nav a').forEach((link) => {
-        link.addEventListener('click', () => {
-          logClick('Nav link clicked', link.textContent.trim());
-        });
-      });
-
-      document.querySelectorAll('.social-icons a').forEach((iconLink) => {
-        iconLink.addEventListener('click', () => {
-          logClick('Social icon clicked', iconLink.href);
-        });
-      });
+    const lightbox = document.createElement('div');
+    lightbox.classList.add('lightbox');
+    lightbox.style = 'display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;';
+    lightbox.id = 'lightbox';
+    lightbox.innerHTML = '<img src="" alt="Expanded view" style="max-width: 90%; max-height: 90%; border-radius: 10px;">';
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      lightbox.style.display = 'none';
+      lightbox.querySelector('img').src = '';
     });
+    document.body.appendChild(lightbox);
   </script>
 </body>
 </html>
