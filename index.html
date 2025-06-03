@@ -194,31 +194,32 @@
       <img src="" alt="Expanded view">
     </div>
 
-    <section class="contact" id="contact">
-      <h2>Contact</h2>
-      <p class="contact-description">Got a question, idea, or just want to say hi?</p>
-      <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
-      <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out using the form below.</p>
-      <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
-      <div class="contact-container">
-        <form action="https://formsubmit.co/pktcraftscontact@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="New message from PKT Crafts!">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://pktcrafts.com/thanks.html">
-          <input type="text" name="firstName" placeholder="First Name" required>
-          <input type="text" name="lastName" placeholder="Last Name" required>
-          <input type="email" name="email" placeholder="Email" required>
-          <input type="text" name="subject" placeholder="Subject" required>
-          <textarea name="message" placeholder="Message" rows="5" required></textarea>
-          <button type="submit">Send</button>
-        </form>
+<section class="contact" id="contact">
+  <h2>Contact</h2>
+  <p class="contact-description">Got a question, idea, or just want to say hi?</p>
+  <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
+  <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out by email instead.</p>
+  <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
+  
+  <div class="contact-container">
+    <div>
+      <p style="font-weight: bold; margin-top: 1rem;">📬 Send an email to:</p>
+      <p id="email" style="font-size: 1.1rem;"></p>
+      <script>
+        const user = 'pktcraftscontact';
+        const domain = 'gmail.com';
+        const emailText = `${user}@${domain}`;
+        const emailLink = `<a href="mailto:${emailText}" style="color: #000; text-decoration: underline;">${emailText}</a>`;
+        document.getElementById('email').innerHTML = emailLink;
+      </script>
+    </div>
 
-        <div class="store-embed">
-          <iframe style="border-radius:24px;border:none" src="https://embed.creator-spring.com/widget?slug=pktcrafts&per=3&currency=&page=1&layout=grid-sm-4&theme=light" title="PKTCrafts Merch store" width="96%" height="399" scrolling="no" data-reactroot=""></iframe>
-        </div>
-      </div>
-    </section>
+    <div class="store-embed">
+      <iframe style="border-radius:24px;border:none" src="https://embed.creator-spring.com/widget?slug=pktcrafts&per=3&currency=&page=1&layout=grid-sm-4&theme=light" title="PKTCrafts Merch store" width="96%" height="399" scrolling="no" data-reactroot=""></iframe>
+    </div>
+  </div>
+</section>
+
   </main>
 
   <footer>
