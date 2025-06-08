@@ -6,26 +6,57 @@
   <title>Arena Island Login</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f2f2f2; }
-    input, button { padding: 10px; margin: 10px; }
-    #user-info { margin-top: 30px; font-weight: bold; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      background: #f0f0f0;
+    }
+    #title {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto 10px;
+      display: block;
+    }
+    .form-container {
+      margin-top: 10px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      font-size: 1em;
+    }
+    .btn-img {
+      width: 160px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #user-info {
+      margin-top: 20px;
+      font-weight: bold;
+    }
     .error { color: red; }
     .success { color: green; }
   </style>
 </head>
 <body>
-  <h1>Login to Arena Island</h1>
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Password" />
-  <br />
-  <button id="register-btn">Register</button>
-  <button id="login-btn">Log In</button>
+
+  <img src="title.png" id="title" alt="Arena Island Title" />
+
+  <div class="form-container">
+    <input type="email" id="email" placeholder="Email" /><br />
+    <input type="password" id="password" placeholder="Password" /><br />
+    <img src="register.png" class="btn-img" id="register-btn" alt="Register" />
+    <img src="login.png" class="btn-img" id="login-btn" alt="Login" />
+  </div>
 
   <div id="user-info"></div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function signUp() {
@@ -61,7 +92,6 @@
       }
     }
 
-    // Supabase auth redirect handler
     window.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("register-btn").addEventListener("click", signUp);
       document.getElementById("login-btn").addEventListener("click", signIn);
