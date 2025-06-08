@@ -20,16 +20,16 @@
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function loadPlayer() {
-      const { data: { user }, error } = await supabase.auth.getUser();
+      const { data: { user }, error } = await client.auth.getUser();
       if (error || !user) {
         window.location.href = "login.html";
         return;
       }
 
-      const { data: player, error: playerError } = await supabase
+      const { data: player, error: playerError } = await client
         .from('players')
         .select('*')
         .eq('id', user.id)
@@ -51,7 +51,6 @@
 
     function playGame() {
       alert("Launching game… (placeholder)");
-      // Later: load Godot game or redirect to game.html?play=true
     }
 
     loadPlayer();
