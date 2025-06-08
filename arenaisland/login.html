@@ -61,21 +61,26 @@
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function signUp() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const msg = document.getElementById('user-info');
+async function signUp() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const msg = document.getElementById('user-info');
 
-      const { error } = await client.auth.signUp({ email, password });
+  const { error } = await client.auth.signUp({ email, password });
 
-      if (error) {
-        msg.textContent = error.message;
-        msg.className = 'error';
-      } else {
-        msg.textContent = "Registered! Please check your email to confirm.";
-        msg.className = 'success';
-      }
+  if (error) {
+    if (error.message.includes("User already registered")) {
+      msg.textContent = "This email is already registered. Please log in.";
+    } else {
+      msg.textContent = "Registration error: " + error.message;
     }
+    msg.className = 'error';
+  } else {
+    msg.textContent = "Registered! Please check your email to confirm.";
+    msg.className = 'success';
+  }
+}
+
 
     async function signIn() {
       const email = document.getElementById('email').value.trim();
