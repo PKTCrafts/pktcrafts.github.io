@@ -8,49 +8,51 @@
   <style>
     body {
       font-family: sans-serif;
+      background: #f2f2f2;
       text-align: center;
-      padding: 0;
-      margin: 0;
-      background: #f0f0f0;
+      padding-top: 60px;
     }
-    #title {
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto 10px;
-      display: block;
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
     }
-    .form-container {
-      margin-top: 10px;
-    }
+
     input {
-      padding: 10px;
-      margin: 10px;
-      width: 250px;
+      padding: 12px;
+      margin: 8px;
       font-size: 1em;
+      width: 250px;
     }
+
     .btn-img {
-      width: 160px;
-      margin: 10px;
       cursor: pointer;
+      margin: 10px;
+      width: 150px;
+      height: auto;
     }
+
     #user-info {
       margin-top: 20px;
       font-weight: bold;
     }
-    .error { color: red; }
-    .success { color: green; }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
   </style>
 </head>
 <body>
+  <h1>Arena Island</h1>
 
- <h1>Welcome to Arena Island</h1>
-
-  <div class="form-container">
-    <input type="email" id="email" placeholder="Email" /><br />
-    <input type="password" id="password" placeholder="Password" /><br />
-    <img src="register.png" class="btn-img" id="register-btn" alt="Register" />
-    <img src="login.png" class="btn-img" id="login-btn" alt="Login" />
-  </div>
+  <input type="email" id="email" placeholder="Email" /><br />
+  <input type="password" id="password" placeholder="Password" /><br />
+  <img src="register.png" class="btn-img" id="register-btn" alt="Register" />
+  <img src="login.png" class="btn-img" id="login-btn" alt="Login" />
 
   <div id="user-info"></div>
 
