@@ -22,49 +22,48 @@
   <div id="user-info"></div>
 
   <script>
-  const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function signUp() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const { error } = await supabase.auth.signUp({ email, password });
-    document.getElementById('user-info').textContent = error ? error.message : "Registered! Please check your email to confirm.";
-  }
+    async function signUp() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { error } = await client.auth.signUp({ email, password });
+      document.getElementById('user-info').textContent = error ? error.message : "Registered! Please check your email to confirm.";
+    }
 
-  async function signIn() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    async function signIn() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      document.getElementById('user-info').textContent = error.message;
-    } else {
-      const userId = data.user.id;
-
-      const { data: player, error: playerError } = await supabase
-        .from('players')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (playerError) {
-        document.getElementById('user-info').textContent = "Login successful, but no player data found.";
-        console.error(playerError);
+      if (error) {
+        document.getElementById('user-info').textContent = error.message;
       } else {
-        document.getElementById('user-info').innerHTML = `
-          <p>✅ Logged in as: ${data.user.email}</p>
-          <p><strong>Nickname:</strong> ${player.nickname}</p>
-          <p><strong>Rating:</strong> ${player.rating}</p>
-          <p><strong>Kills:</strong> ${player.kills}</p>
-          <p><strong>Deaths:</strong> ${player.deaths}</p>
-          <p><strong>Coins:</strong> ${player.coins}</p>
-        `;
+        const userId = data.user.id;
+
+        const { data: player, error: playerError } = await client
+          .from('players')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (playerError) {
+          document.getElementById('user-info').textContent = "Login successful, but no player data found.";
+          console.error(playerError);
+        } else {
+          document.getElementById('user-info').innerHTML = `
+            <p>✅ Logged in as: ${data.user.email}</p>
+            <p><strong>Nickname:</strong> ${player.nickname}</p>
+            <p><strong>Rating:</strong> ${player.rating}</p>
+            <p><strong>Kills:</strong> ${player.kills}</p>
+            <p><strong>Deaths:</strong> ${player.deaths}</p>
+            <p><strong>Coins:</strong> ${player.coins}</p>
+          `;
+        }
       }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
