@@ -9,13 +9,19 @@
     body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f0f0f0; }
     h1 { font-size: 2em; }
     .stats { margin-top: 30px; font-size: 1.2em; }
-    .play-btn { padding: 12px 25px; font-size: 1.2em; margin-top: 20px; }
+    .play-btn, .logout-btn {
+      padding: 12px 25px;
+      font-size: 1.2em;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Welcome to Arena Island</h1>
   <div id="player-info" class="stats">Loading player data...</div>
   <button class="play-btn" onclick="playGame()">▶️ Play</button>
+  <button class="logout-btn" onclick="logout()">🚪 Log Out</button>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
@@ -47,6 +53,11 @@
         <p><strong>Deaths:</strong> ${player.deaths}</p>
         <p><strong>Coins:</strong> ${player.coins}</p>
       `;
+    }
+
+    async function logout() {
+      await client.auth.signOut();
+      window.location.href = "login.html";
     }
 
     function playGame() {
