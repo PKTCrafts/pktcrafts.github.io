@@ -8,9 +8,9 @@
   <style>
     body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f2f2f2; }
     input, button { padding: 10px; margin: 10px; }
-    #user-info { margin-top: 30px; font-weight: bold; color: #333; }
-    #user-info.error { color: red; }
-    #user-info.success { color: green; }
+    #user-info { margin-top: 30px; font-weight: bold; }
+    .error { color: red; }
+    .success { color: green; }
   </style>
 </head>
 <body>
@@ -18,8 +18,8 @@
   <input type="email" id="email" placeholder="Email" />
   <input type="password" id="password" placeholder="Password" />
   <br />
-  <button onclick="signUp()">Register</button>
-  <button onclick="signIn()">Log In</button>
+  <button id="register-btn">Register</button>
+  <button id="login-btn">Log In</button>
 
   <div id="user-info"></div>
 
@@ -28,11 +28,16 @@
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    document.getElementById("register-btn").addEventListener("click", signUp);
+    document.getElementById("login-btn").addEventListener("click", signIn);
+
     async function signUp() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { error } = await supabase.auth.signUp({ email, password });
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       const msg = document.getElementById('user-info');
+
+      const { error } = await supabase.auth.signUp({ email, password });
+
       if (error) {
         msg.textContent = error.message;
         msg.className = 'error';
@@ -43,13 +48,13 @@
     }
 
     async function signIn() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const msg = document.getElementById('user-info');
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-      const msg = document.getElementById('user-info');
       if (error) {
-        console.error("Login error:", error);
         msg.textContent = "Login failed: " + error.message;
         msg.className = 'error';
       } else {
@@ -59,7 +64,7 @@
       }
     }
 
-    // ✅ Handle access_token from email confirmation
+    // ✅ Handle email confirmation with access_token from URL
     window.addEventListener("DOMContentLoaded", async () => {
       const hash = window.location.hash;
       if (hash.includes("access_token")) {
