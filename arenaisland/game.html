@@ -1,7 +1,60 @@
 <!DOCTYPE html>
-<html>
-  <head><title>Arena Island Game</title></head>
-  <body>
-    <h1>You're in the game!</h1>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arena Island</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f0f0f0; }
+    h1 { font-size: 2em; }
+    .stats { margin-top: 30px; font-size: 1.2em; }
+    .play-btn { padding: 12px 25px; font-size: 1.2em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Arena Island</h1>
+  <div id="player-info" class="stats">Loading player data...</div>
+  <button class="play-btn" onclick="playGame()">▶️ Play</button>
+
+  <script>
+    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadPlayer() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: player, error: playerError } = await supabase
+        .from('players')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (playerError || !player) {
+        document.getElementById('player-info').textContent = "Player data not found.";
+        return;
+      }
+
+      document.getElementById('player-info').innerHTML = `
+        <p><strong>Nickname:</strong> ${player.nickname}</p>
+        <p><strong>Rating:</strong> ${player.rating}</p>
+        <p><strong>Kills:</strong> ${player.kills}</p>
+        <p><strong>Deaths:</strong> ${player.deaths}</p>
+        <p><strong>Coins:</strong> ${player.coins}</p>
+      `;
+    }
+
+    function playGame() {
+      alert("Launching game… (placeholder)");
+      // Later: load Godot game or redirect to game.html?play=true
+    }
+
+    loadPlayer();
+  </script>
+</body>
 </html>
