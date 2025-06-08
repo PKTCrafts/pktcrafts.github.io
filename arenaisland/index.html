@@ -1,39 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arena Island Login</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f2f2f2; }
-    input, button { padding: 10px; margin: 10px; }
-    #user-info { margin-top: 30px; font-weight: bold; }
-  </style>
-</head>
-<body>
-  <h1>Login to Arena Island</h1>
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Password" />
-  <br />
-  <button onclick="signUp()">Register</button>
-  <button onclick="signIn()">Log In</button>
-
-  <div id="user-info"></div>
-
-  <script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function signUp() {
+    window.signUp = async function () {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const { error } = await client.auth.signUp({ email, password });
       document.getElementById('user-info').textContent = error ? error.message : "Registered! Please check your email to confirm.";
     }
 
-    async function signIn() {
+    window.signIn = async function () {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const { data, error } = await client.auth.signInWithPassword({ email, password });
@@ -51,7 +29,6 @@
 
         if (playerError) {
           document.getElementById('user-info').textContent = "Login successful, but no player data found.";
-          console.error(playerError);
         } else {
           document.getElementById('user-info').innerHTML = `
             <p>✅ Logged in as: ${data.user.email}</p>
@@ -64,6 +41,5 @@
         }
       }
     }
-  </script>
-</body>
-</html>
+  });
+</script>
