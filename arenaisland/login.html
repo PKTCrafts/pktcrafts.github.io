@@ -28,9 +28,6 @@
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    document.getElementById("register-btn").addEventListener("click", signUp);
-    document.getElementById("login-btn").addEventListener("click", signIn);
-
     async function signUp() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
@@ -64,8 +61,11 @@
       }
     }
 
-    // ✅ Handle email confirmation with access_token from URL
+    // Supabase auth redirect handler
     window.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("register-btn").addEventListener("click", signUp);
+      document.getElementById("login-btn").addEventListener("click", signIn);
+
       const hash = window.location.hash;
       if (hash.includes("access_token")) {
         const params = new URLSearchParams(hash.substring(1));
