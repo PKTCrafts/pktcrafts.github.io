@@ -1,34 +1,89 @@
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arena Island Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f2f2f2; }
+    input, button { padding: 10px; margin: 10px; }
+    #user-info { margin-top: 30px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Login to Arena Island</h1>
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
+  <br />
+  <button onclick="signUp()">Register</button>
+  <button onclick="signIn()">Log In</button>
 
-    window.signUp = async function () {
+  <div id="user-info"></div>
+
+  <script>
+    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function signUp() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const { error } = await client.auth.signUp({ email, password });
-      document.getElementById('user-info').textContent = error ? error.message : "Registered! Please check your email to confirm.";
+
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        document.getElementById('user-info').textContent = error.message;
+        return;
+      }
+
+      const userId = data.user?.id;
+      if (!userId) {
+        document.getElementById('user-info').textContent = "Signup succeeded, but user ID not found.";
+        return;
+      }
+
+      // Create row in players table
+      const { error: insertError } = await supabase.from('players').insert({
+        id: userId,
+        username: email,
+        nickname: 'Unnamed',
+        rating: 1500,
+        kills: 0,
+        deaths: 0,
+        hearts: 3,
+        sword: 0.5,
+        bombs: 0,
+        arrows: 0,
+        coins: 0,
+        banned: false,
+        created_at: new Date()
+      });
+
+      document.getElementById('user-info').textContent = insertError
+        ? "Registered, but failed to create player: " + insertError.message
+        : "Registered! Please check your email to confirm.";
     }
 
-    window.signIn = async function () {
+    async function signIn() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const { data, error } = await client.auth.signInWithPassword({ email, password });
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         document.getElementById('user-info').textContent = error.message;
       } else {
         const userId = data.user.id;
 
-        const { data: player, error: playerError } = await client
+        const { data: player, error: playerError } = await supabase
           .from('players')
           .select('*')
           .eq('id', userId)
           .single();
 
         if (playerError) {
-          document.getElementById('user-info').textContent = "Login successful, but no player data found.";
+          document.getElementById('user-info').textContent = "Login OK, but no player data found.";
         } else {
           document.getElementById('user-info').innerHTML = `
             <p>✅ Logged in as: ${data.user.email}</p>
@@ -41,5 +96,6 @@
         }
       }
     }
-  });
-</script>
+  </script>
+</body>
+</html>
