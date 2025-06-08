@@ -6,22 +6,35 @@
   <title>Arena Island</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f0f0f0; }
-    h1 { font-size: 2em; }
-    .stats { margin-top: 30px; font-size: 1.2em; }
-    .play-btn, .logout-btn {
-      padding: 12px 25px;
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background: #f0f0f0;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .stats {
       font-size: 1.2em;
-      margin-top: 20px;
-      margin-left: 10px;
+      margin-bottom: 20px;
+    }
+    .btn-img {
+      width: 160px;
+      height: auto;
+      margin: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Welcome to Arena Island</h1>
   <div id="player-info" class="stats">Loading player data...</div>
-  <button class="play-btn" onclick="playGame()">▶️ Play</button>
-  <button class="logout-btn" onclick="logout()">🚪 Log Out</button>
+  <div>
+    <img src="play.png" alt="Play" class="btn-img" onclick="playGame()" />
+    <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
+  </div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
@@ -55,13 +68,13 @@
       `;
     }
 
+    function playGame() {
+      alert("Launching game… (placeholder)");
+    }
+
     async function logout() {
       await client.auth.signOut();
       window.location.href = "login.html";
-    }
-
-    function playGame() {
-      alert("Launching game… (placeholder)");
     }
 
     loadPlayer();
