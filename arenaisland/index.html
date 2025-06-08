@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arena Island Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f2f2f2; }
+    input, button { padding: 10px; margin: 10px; }
+    #user-info { margin-top: 30px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Login til Arena Island</h1>
+  <input type="email" id="email" placeholder="E-post" />
+  <input type="password" id="password" placeholder="Passord" />
+  <br />
+  <button onclick="signUp()">Registrer</button>
+  <button onclick="signIn()">Logg inn</button>
+
+  <div id="user-info"></div>
+
+  <script>
+    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function signUp() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { error } = await supabase.auth.signUp({ email, password });
+      document.getElementById('user-info').textContent = error ? error.message : "Registrert! Sjekk e-post.";
+    }
+
+    async function signIn() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        document.getElementById('user-info').textContent = error.message;
+      } else {
+        document.getElementById('user-info').textContent = "Logget inn som: " + data.user.email;
+      }
+    }
+  </script>
+</body>
+</html>
