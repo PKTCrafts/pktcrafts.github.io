@@ -9,7 +9,7 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      padding-top: 50px;
+      padding-top: 30px;
       background: #f0f0f0;
     }
     h1 {
@@ -38,6 +38,30 @@
       color: red;
       margin-top: 5px;
     }
+    #game-container {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      margin: 30px auto;
+    }
+    #game-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 1;
+    }
+    #frame-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -64,6 +88,11 @@
     <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
   </div>
 
+  <div id="game-container" style="display: none;">
+    <iframe id="game-frame" src="start/index.html"></iframe>
+    <img id="frame-overlay" src="game_frame.png" alt="Game Frame" />
+  </div>
+
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
@@ -72,6 +101,7 @@
     const playBtn = document.getElementById("play-btn");
     const nicknameInput = document.getElementById("nickname");
     const errorMsg = document.getElementById("error-msg");
+    const gameContainer = document.getElementById("game-container");
 
     const nicknameDisplay = document.getElementById("nickname-display");
     const ratingDisplay = document.getElementById("rating");
@@ -81,10 +111,10 @@
 
     const namingSection = document.getElementById("naming-section");
     const statsSection = document.getElementById("stats-section");
-    
+
     const blacklist = ["cunt", "fuck", "shit", "sh1t", "nigger", "n1gg3r", "faggot", "bitch", "b1tch", "bastard", "asshole", "dick", "d1ck", "cock", "pussy", "slut", "whore", "twat", "nazi", "hitler", "h1tler", "h1tl3r", "hitl3r", "kkk", "retard", "r3tard", "rape", "rapist", "fag", "dyke", "tranny", "gaylord", "molester", "pedophile", "pedo", "arse", "spastic", "goddamn", "damn", "hell", "anal", "motherfucker", "suckmydick", "suckdick", "dicksucker", "fuckface", "shithead", "asswipe", "jerkoff", "jackoff", "ballsack", "cum", "milf", "porn", "boobs", "tit", "tits", "nude", "nudes", "sex", "hentai", "incest", "genital", "erect", "orgy", "orgasm", "clit", "clitoris", "labia", "dildo", "vibrator", "penetrate"];
 
-   async function loadPlayer() {
+    async function loadPlayer() {
       const { data: { user }, error } = await client.auth.getUser();
       if (error || !user) {
         window.location.href = "login.html";
@@ -197,7 +227,9 @@
         await client.from("players").update({ nickname: name }).eq("id", user.id);
       }
 
-      window.location.href = "start/index.html";
+      document.getElementById("naming-section").style.display = "none";
+      document.getElementById("stats-section").style.display = "none";
+      gameContainer.style.display = "block";
     });
 
     async function logout() {
