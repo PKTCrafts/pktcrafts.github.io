@@ -101,15 +101,27 @@
         return;
       }
 
-      const { data: player, error: playerError } = await client
+      let { data: player, error: playerError } = await client
         .from("players")
         .select("*")
         .eq("id", user.id)
         .single();
 
+      // Opprett ny rad dersom den ikke finnes
       if (playerError || !player) {
-        errorMsg.textContent = "Player not found.";
-        return;
+        const { error: insertError } = await client.from("players").insert([
+          { id: user.id, username: user.email }
+        ]);
+        if (insertError) {
+          errorMsg.textContent = "Could not create player profile.";
+          return;
+        }
+        // Forsøk å hente igjen
+        ({ data: player } = await client
+          .from("players")
+          .select("*")
+          .eq("id", user.id)
+          .single());
       }
 
       const nickname = player.nickname?.trim();
@@ -117,7 +129,6 @@
       if (!nickname) {
         namingSection.style.display = "block";
         updatePlayButton(false);
-
         nicknameInput.addEventListener("input", async () => {
           const name = nicknameInput.value.trim();
           const isValid = await validateNickname(name);
@@ -126,7 +137,6 @@
       } else {
         statsSection.style.display = "block";
         updatePlayButton(true);
-
         nicknameDisplay.textContent = nickname;
         ratingDisplay.textContent = player.rating ?? "0";
         killsDisplay.textContent = player.kills ?? "0";
