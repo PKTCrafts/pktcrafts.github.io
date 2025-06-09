@@ -91,28 +91,20 @@
     const deathsDisplay = document.getElementById("deaths");
     const coinsDisplay = document.getElementById("coins");
 
-    async function loadPlayer() {
-      try {
+    async function loadPlayer(retries = 5) {
+      for (let i = 0; i < retries; i++) {
         const { data: { user }, error } = await client.auth.getUser();
 
-        if (error || !user) {
-          // Retry after a delay in case Supabase isn't ready
-          setTimeout(async () => {
-            const retry = await client.auth.getUser();
-            if (!retry.data.user) {
-              window.location.href = "login.html";
-            } else {
-              fetchPlayer(retry.data.user);
-            }
-          }, 1000);
+        if (user) {
+          fetchPlayer(user);
           return;
         }
 
-        fetchPlayer(user);
-      } catch (err) {
-        console.error("Error loading user:", err);
-        window.location.href = "login.html";
+        await new Promise((res) => setTimeout(res, 500)); // Vent 500ms før neste forsøk
       }
+
+      // Hvis bruker fortsatt ikke er funnet, redirect til login
+      window.location.href = "login.html";
     }
 
     async function fetchPlayer(user) {
