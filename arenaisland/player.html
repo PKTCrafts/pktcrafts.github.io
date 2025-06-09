@@ -23,9 +23,21 @@
       font-weight: bold;
     }
 
+    .form-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .form-row label {
+      width: 80px;
+      text-align: right;
+    }
+
     input[type="text"] {
       padding: 10px;
-      margin: 10px;
       width: 220px;
       font-size: 1rem;
       border: 1px solid #ccc;
@@ -60,6 +72,7 @@
 
     #error-msg {
       color: red;
+      font-size: 0.9em;
       margin-top: 5px;
     }
 
@@ -78,13 +91,19 @@
   <!-- Naming section -->
   <div id="naming-section" style="display: none;">
     <p><strong>Please name your character!</strong></p>
-    <input type="text" id="nickname" placeholder="Enter your name" />
+
+    <div class="form-row">
+      <label for="nickname">Name:</label>
+      <input type="text" id="nickname" placeholder="Enter your name" />
+    </div>
+    <div id="error-msg"></div>
+
     <div id="button-container">
       <img src="back.png" alt="Back" class="btn-img" onclick="logout()" />
       <img id="next-btn" src="next_grey.png" alt="Next" class="btn-img disabled" />
     </div>
+
     <p class="warning">Note: Inappropriate names may result in suspension or banning.</p>
-    <div id="error-msg"></div>
   </div>
 
   <!-- Stats section -->
