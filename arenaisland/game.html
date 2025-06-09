@@ -9,54 +9,44 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      padding-top: 30px;
+      padding-top: 50px;
       background: #f0f0f0;
     }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-    .warning {
-      color: red;
-      font-size: 0.9em;
-      margin-bottom: 5px;
-    }
-    label {
-      font-weight: bold;
-    }
+
     .btn-img {
       width: 160px;
       height: auto;
       margin: 10px;
       cursor: pointer;
     }
+
     .disabled {
       pointer-events: none;
       opacity: 0.6;
     }
+
     #error-msg {
       color: red;
       margin-top: 5px;
     }
+
     #game-container {
       position: relative;
-      width: 1280px;
-      height: 720px;
-      margin: 30px auto;
+      width: 960px;
+      height: 540px;
+      margin: 0 auto;
     }
-    #game-frame {
+
+    #game-iframe {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       border: none;
       z-index: 1;
     }
-    #frame-overlay {
+
+    #game-frame {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       z-index: 2;
@@ -65,54 +55,40 @@
   </style>
 </head>
 <body>
-  <h1>Welcome to Arena Island!</h1>
-
-  <div id="naming-section" style="display: none;">
-    <p><strong>Please name your character</strong></p>
-    <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
-    <label for="nickname">* Name:</label>
-    <input type="text" id="nickname" placeholder="Enter your name" />
-    <div id="error-msg"></div>
-  </div>
-
-  <div id="stats-section" class="stats" style="display: none;">
+  <!-- Stats-skjerm -->
+  <div id="stats-section">
     <p><strong>Nickname:</strong> <span id="nickname-display"></span></p>
     <p><strong>Rating:</strong> <span id="rating"></span></p>
     <p><strong>Kills:</strong> <span id="kills"></span></p>
     <p><strong>Deaths:</strong> <span id="deaths"></span></p>
     <p><strong>Coins:</strong> <span id="coins"></span></p>
+    <div>
+      <img id="play-btn" src="play.png" alt="Play" class="btn-img" />
+      <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
+    </div>
   </div>
 
-  <div>
-    <img id="play-btn" src="play_grey.png" alt="Play" class="btn-img disabled" />
-    <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
-  </div>
-
-  <div id="game-container" style="display: none;">
-    <iframe id="game-frame" src="start/index.html"></iframe>
-    <img id="frame-overlay" src="game_frame.png" alt="Game Frame" />
+  <!-- Spill-skjerm -->
+  <div id="game-section" style="display: none;">
+    <div id="game-container">
+      <iframe id="game-iframe" src="start/index.html"></iframe>
+      <img id="game-frame" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Game Frame" />
+    </div>
   </div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const playBtn = document.getElementById("play-btn");
-    const nicknameInput = document.getElementById("nickname");
-    const errorMsg = document.getElementById("error-msg");
-    const gameContainer = document.getElementById("game-container");
 
     const nicknameDisplay = document.getElementById("nickname-display");
     const ratingDisplay = document.getElementById("rating");
     const killsDisplay = document.getElementById("kills");
     const deathsDisplay = document.getElementById("deaths");
     const coinsDisplay = document.getElementById("coins");
-
-    const namingSection = document.getElementById("naming-section");
     const statsSection = document.getElementById("stats-section");
-
-    const blacklist = ["cunt", "fuck", "shit", "sh1t", "nigger", "n1gg3r", "faggot", "bitch", "b1tch", "bastard", "asshole", "dick", "d1ck", "cock", "pussy", "slut", "whore", "twat", "nazi", "hitler", "h1tler", "h1tl3r", "hitl3r", "kkk", "retard", "r3tard", "rape", "rapist", "fag", "dyke", "tranny", "gaylord", "molester", "pedophile", "pedo", "arse", "spastic", "goddamn", "damn", "hell", "anal", "motherfucker", "suckmydick", "suckdick", "dicksucker", "fuckface", "shithead", "asswipe", "jerkoff", "jackoff", "ballsack", "cum", "milf", "porn", "boobs", "tit", "tits", "nude", "nudes", "sex", "hentai", "incest", "genital", "erect", "orgy", "orgasm", "clit", "clitoris", "labia", "dildo", "vibrator", "penetrate"];
+    const gameSection = document.getElementById("game-section");
+    const playBtn = document.getElementById("play-btn");
 
     async function loadPlayer() {
       const { data: { user }, error } = await client.auth.getUser();
@@ -128,108 +104,19 @@
         .single();
 
       if (playerError || !player) {
-        errorMsg.textContent = "Player not found.";
         return;
       }
 
-      if (!player.nickname) {
-        namingSection.style.display = "block";
-        playBtn.classList.add("disabled");
-        playBtn.src = "play_grey.png";
-      } else {
-        statsSection.style.display = "block";
-        playBtn.classList.remove("disabled");
-        playBtn.src = "play.png";
-
-        nicknameDisplay.textContent = player.nickname;
-        ratingDisplay.textContent = player.rating;
-        killsDisplay.textContent = player.kills;
-        deathsDisplay.textContent = player.deaths;
-        coinsDisplay.textContent = player.coins;
-      }
+      nicknameDisplay.textContent = player.nickname || "Unnamed";
+      ratingDisplay.textContent = player.rating ?? "0";
+      killsDisplay.textContent = player.kills ?? "0";
+      deathsDisplay.textContent = player.deaths ?? "0";
+      coinsDisplay.textContent = player.coins ?? "0";
     }
 
-    nicknameInput?.addEventListener("input", async () => {
-      const name = nicknameInput.value.trim();
-      const isValid = await validateNickname(name);
-      updatePlayButton(isValid);
-    });
-
-    async function validateNickname(name) {
-      const lowerName = name.toLowerCase();
-
-      if (!name) {
-        errorMsg.textContent = "Name cannot be empty.";
-        return false;
-      }
-
-      if (name.length < 2 || name.length > 16) {
-        errorMsg.textContent = "Name must be between 2 and 16 characters.";
-        return false;
-      }
-
-      const allowedPattern = /^[a-zA-Z0-9_ ]+$/;
-      if (!allowedPattern.test(name)) {
-        errorMsg.textContent = "Only letters, numbers, spaces and underscores are allowed.";
-        return false;
-      }
-
-      if (blacklist.includes(lowerName)) {
-        errorMsg.textContent = "That name is inappropriate.";
-        return false;
-      }
-
-      const { data, error } = await client
-        .from("players")
-        .select("nickname")
-        .eq("nickname", name);
-
-      if (error) {
-        errorMsg.textContent = "Error checking name.";
-        return false;
-      }
-
-      if (data.length > 0) {
-        errorMsg.textContent = "That name is already taken.";
-        return false;
-      }
-
-      errorMsg.textContent = "";
-      return true;
-    }
-
-    function updatePlayButton(valid) {
-      if (valid) {
-        playBtn.classList.remove("disabled");
-        playBtn.src = "play.png";
-      } else {
-        playBtn.classList.add("disabled");
-        playBtn.src = "play_grey.png";
-      }
-    }
-
-    playBtn.addEventListener("click", async () => {
-      if (playBtn.classList.contains("disabled")) return;
-
-      const name = nicknameInput?.value?.trim();
-      const { data: { user } } = await client.auth.getUser();
-
-      const { data: player } = await client
-        .from("players")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (!player.nickname && name) {
-        const isValid = await validateNickname(name);
-        if (!isValid) return;
-
-        await client.from("players").update({ nickname: name }).eq("id", user.id);
-      }
-
-      document.getElementById("naming-section").style.display = "none";
-      document.getElementById("stats-section").style.display = "none";
-      gameContainer.style.display = "block";
+    playBtn.addEventListener("click", () => {
+      statsSection.style.display = "none";
+      gameSection.style.display = "block";
     });
 
     async function logout() {
