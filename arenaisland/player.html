@@ -23,16 +23,27 @@
       font-weight: bold;
     }
 
-    input {
+    input[type="text"] {
       padding: 10px;
       margin: 10px;
       width: 220px;
       font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #66afe9;
+      box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
     }
 
     .warning {
       color: red;
       font-size: 0.9em;
+      margin-top: 10px;
     }
 
     .btn-img {
@@ -67,14 +78,13 @@
   <!-- Naming section -->
   <div id="naming-section" style="display: none;">
     <p><strong>Please name your character!</strong></p>
-    <input type="text" id="nickname" placeholder="" />
-    <p class="warning">Note: Inappropriate names may result in suspension or banning.</p>
-    <div id="error-msg"></div>
-
+    <input type="text" id="nickname" placeholder="Enter your name" />
     <div id="button-container">
       <img src="back.png" alt="Back" class="btn-img" onclick="logout()" />
       <img id="next-btn" src="next_grey.png" alt="Next" class="btn-img disabled" />
     </div>
+    <p class="warning">Note: Inappropriate names may result in suspension or banning.</p>
+    <div id="error-msg"></div>
   </div>
 
   <!-- Stats section -->
@@ -116,7 +126,6 @@
         return;
       }
 
-      // Sørg for at spilleren eksisterer i tabellen
       await client.from("players").upsert({ id: user.id }, { onConflict: 'id' });
 
       const { data: player, error: playerError } = await client
