@@ -42,13 +42,21 @@
 </head>
 <body>
   <h1>Welcome to Arena Island!</h1>
-  <p><strong>Please name your character</strong></p>
-  <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
 
-  <div id="player-info" class="stats">
+  <div id="naming-section" style="display: none;">
+    <p><strong>Please name your character</strong></p>
+    <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
     <label for="nickname">* Name:</label>
     <input type="text" id="nickname" placeholder="Enter your name" />
     <div id="error-msg"></div>
+  </div>
+
+  <div id="stats-section" class="stats" style="display: none;">
+    <p><strong>Nickname:</strong> <span id="nickname-display"></span></p>
+    <p><strong>Rating:</strong> <span id="rating"></span></p>
+    <p><strong>Kills:</strong> <span id="kills"></span></p>
+    <p><strong>Deaths:</strong> <span id="deaths"></span></p>
+    <p><strong>Coins:</strong> <span id="coins"></span></p>
   </div>
 
   <div>
@@ -64,10 +72,54 @@
     const playBtn = document.getElementById("play-btn");
     const nicknameInput = document.getElementById("nickname");
     const errorMsg = document.getElementById("error-msg");
+
+    const nicknameDisplay = document.getElementById("nickname-display");
+    const ratingDisplay = document.getElementById("rating");
+    const killsDisplay = document.getElementById("kills");
+    const deathsDisplay = document.getElementById("deaths");
+    const coinsDisplay = document.getElementById("coins");
+
+    const namingSection = document.getElementById("naming-section");
+    const statsSection = document.getElementById("stats-section");
     
     const blacklist = ["cunt", "fuck", "shit", "sh1t", "nigger", "n1gg3r", "faggot", "bitch", "b1tch", "bastard", "asshole", "dick", "d1ck", "cock", "pussy", "slut", "whore", "twat", "nazi", "hitler", "h1tler", "h1tl3r", "hitl3r", "kkk", "retard", "r3tard", "rape", "rapist", "fag", "dyke", "tranny", "gaylord", "molester", "pedophile", "pedo", "arse", "spastic", "goddamn", "damn", "hell", "anal", "motherfucker", "suckmydick", "suckdick", "dicksucker", "fuckface", "shithead", "asswipe", "jerkoff", "jackoff", "ballsack", "cum", "milf", "porn", "boobs", "tit", "tits", "nude", "nudes", "sex", "hentai", "incest", "genital", "erect", "orgy", "orgasm", "clit", "clitoris", "labia", "dildo", "vibrator", "penetrate"];
 
-   nicknameInput.addEventListener("input", async () => {
+   async function loadPlayer() {
+      const { data: { user }, error } = await client.auth.getUser();
+      if (error || !user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: player, error: playerError } = await client
+        .from("players")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (playerError || !player) {
+        errorMsg.textContent = "Player not found.";
+        return;
+      }
+
+      if (!player.nickname) {
+        namingSection.style.display = "block";
+        playBtn.classList.add("disabled");
+        playBtn.src = "play_grey.png";
+      } else {
+        statsSection.style.display = "block";
+        playBtn.classList.remove("disabled");
+        playBtn.src = "play.png";
+
+        nicknameDisplay.textContent = player.nickname;
+        ratingDisplay.textContent = player.rating;
+        killsDisplay.textContent = player.kills;
+        deathsDisplay.textContent = player.deaths;
+        coinsDisplay.textContent = player.coins;
+      }
+    }
+
+    nicknameInput?.addEventListener("input", async () => {
       const name = nicknameInput.value.trim();
       const isValid = await validateNickname(name);
       updatePlayButton(isValid);
@@ -129,19 +181,31 @@
     playBtn.addEventListener("click", async () => {
       if (playBtn.classList.contains("disabled")) return;
 
-      const name = nicknameInput.value.trim();
-      const isValid = await validateNickname(name);
-      if (!isValid) return;
+      const name = nicknameInput?.value?.trim();
+      const { data: { user } } = await client.auth.getUser();
 
-      const user = (await client.auth.getUser()).data.user;
-      await client.from("players").update({ nickname: name }).eq("id", user.id);
-      window.location.href = "start.html";
+      const { data: player } = await client
+        .from("players")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (!player.nickname && name) {
+        const isValid = await validateNickname(name);
+        if (!isValid) return;
+
+        await client.from("players").update({ nickname: name }).eq("id", user.id);
+      }
+
+      window.location.href = "start/index.html";
     });
 
     async function logout() {
       await client.auth.signOut();
       window.location.href = "login.html";
     }
+
+    loadPlayer();
   </script>
 </body>
 </html>
