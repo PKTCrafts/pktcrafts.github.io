@@ -19,13 +19,20 @@
       margin-top: 40px;
     }
 
+    label {
+      font-weight: bold;
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 220px;
+      font-size: 1rem;
+    }
+
     .warning {
       color: red;
       font-size: 0.9em;
-    }
-
-    label {
-      font-weight: bold;
     }
 
     .btn-img {
@@ -48,40 +55,48 @@
     #stats-section, #naming-section {
       margin-top: 20px;
     }
+
+    #button-container {
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Welcome to Arena Island!</h1>
 
+  <!-- Naming section -->
   <div id="naming-section" style="display: none;">
-    <p><strong>Please name your character</strong></p>
-    <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
-    <label for="nickname">* Name:</label>
+    <p><strong>Please name your character!</strong></p>
     <input type="text" id="nickname" placeholder="Enter your name" />
+    <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
     <div id="error-msg"></div>
+
+    <div id="button-container">
+      <img src="back.png" alt="Back" class="btn-img" onclick="logout()" />
+      <img id="next-btn" src="next_gray.png" alt="Next" class="btn-img disabled" />
+    </div>
   </div>
 
+  <!-- Stats section -->
   <div id="stats-section" style="display: none;">
     <p><strong>Nickname:</strong> <span id="nickname-display"></span></p>
     <p><strong>Rating:</strong> <span id="rating"></span></p>
     <p><strong>Kills:</strong> <span id="kills"></span></p>
     <p><strong>Deaths:</strong> <span id="deaths"></span></p>
     <p><strong>Coins:</strong> <span id="coins"></span></p>
-  </div>
-
-  <div>
-    <img id="play-btn" src="play_grey.png" alt="Play" class="btn-img disabled" />
+    <img id="play-btn" src="play.png" alt="Play" class="btn-img" onclick="goToGame()" />
     <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
   </div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const playBtn = document.getElementById("play-btn");
     const nicknameInput = document.getElementById("nickname");
     const errorMsg = document.getElementById("error-msg");
+    const nextBtn = document.getElementById("next-btn");
+    const playBtn = document.getElementById("play-btn");
 
     const nicknameDisplay = document.getElementById("nickname-display");
     const ratingDisplay = document.getElementById("rating");
@@ -92,52 +107,48 @@
     const namingSection = document.getElementById("naming-section");
     const statsSection = document.getElementById("stats-section");
 
-    const blacklist = ["cunt","fuck","shit","sh1t","nigger","n1gg3r","faggot","bitch","b1tch","bastard","asshole","dick","d1ck","cock","pussy","slut","whore","twat","nazi","hitler","h1tler","h1tl3r","hitl3r","kkk","retard","r3tard","rape","rapist","fag","dyke","tranny","gaylord","molester","pedophile","pedo","arse","spastic","goddamn","damn","hell","anal","motherfucker","suckmydick","suckdick","dicksucker","fuckface","shithead","asswipe","jerkoff","jackoff","ballsack","cum","milf","porn","boobs","tit","tits","nude","nudes","sex","hentai","incest","genital","erect","orgy","orgasm","clit","clitoris","labia","dildo","vibrator","penetrate"];
+    const blacklist = [..."cunt", "fuck", "shit", "nigger", "faggot", "bitch", "dick", "rape", "porn", "sex", "hitler", "kkk"];
 
     async function loadPlayer() {
       const { data: { user }, error } = await client.auth.getUser();
-      if (error || !user) {
-        window.location.href = "login.html";
-        return;
-      }
+      if (error || !user) return (window.location.href = "login.html");
 
-      let { data: player, error: playerError } = await client
+      const { data: player, error: playerError } = await client
         .from("players")
         .select("*")
         .eq("id", user.id)
         .single();
 
-      // Opprett ny rad dersom den ikke finnes
       if (playerError || !player) {
-        const { error: insertError } = await client.from("players").insert([
-          { id: user.id, username: user.email }
-        ]);
-        if (insertError) {
-          errorMsg.textContent = "Could not create player profile.";
-          return;
-        }
-        // Forsøk å hente igjen
-        ({ data: player } = await client
-          .from("players")
-          .select("*")
-          .eq("id", user.id)
-          .single());
+        errorMsg.textContent = "Player not found.";
+        return;
       }
 
-      const nickname = player.nickname?.trim();
-
-      if (!nickname) {
+      if (!player.nickname) {
         namingSection.style.display = "block";
-        updatePlayButton(false);
+        nextBtn.classList.add("disabled");
+        nextBtn.src = "next_gray.png";
+
         nicknameInput.addEventListener("input", async () => {
+          const isValid = await validateNickname(nicknameInput.value.trim());
+          if (isValid) {
+            nextBtn.classList.remove("disabled");
+            nextBtn.src = "next.png";
+          } else {
+            nextBtn.classList.add("disabled");
+            nextBtn.src = "next_gray.png";
+          }
+        });
+
+        nextBtn.addEventListener("click", async () => {
+          if (nextBtn.classList.contains("disabled")) return;
           const name = nicknameInput.value.trim();
-          const isValid = await validateNickname(name);
-          updatePlayButton(isValid);
+          await client.from("players").update({ nickname: name }).eq("id", user.id);
+          window.location.reload();
         });
       } else {
         statsSection.style.display = "block";
-        updatePlayButton(true);
-        nicknameDisplay.textContent = nickname;
+        nicknameDisplay.textContent = player.nickname;
         ratingDisplay.textContent = player.rating ?? "0";
         killsDisplay.textContent = player.kills ?? "0";
         deathsDisplay.textContent = player.deaths ?? "0";
@@ -147,82 +158,31 @@
 
     async function validateNickname(name) {
       const lowerName = name.toLowerCase();
+      if (!name) return setError("Name cannot be empty.");
+      if (name.length < 2 || name.length > 16) return setError("Name must be between 2 and 16 characters.");
+      if (!/^[a-zA-Z0-9_ ]+$/.test(name)) return setError("Only letters, numbers, spaces and underscores are allowed.");
+      if (blacklist.includes(lowerName)) return setError("That name is inappropriate.");
 
-      if (!name) {
-        errorMsg.textContent = "Name cannot be empty.";
-        return false;
-      }
-
-      if (name.length < 2 || name.length > 16) {
-        errorMsg.textContent = "Name must be between 2 and 16 characters.";
-        return false;
-      }
-
-      const allowedPattern = /^[a-zA-Z0-9_ ]+$/;
-      if (!allowedPattern.test(name)) {
-        errorMsg.textContent = "Only letters, numbers, spaces and underscores are allowed.";
-        return false;
-      }
-
-      if (blacklist.includes(lowerName)) {
-        errorMsg.textContent = "That name is inappropriate.";
-        return false;
-      }
-
-      const { data, error } = await client
-        .from("players")
-        .select("nickname")
-        .eq("nickname", name);
-
-      if (error) {
-        errorMsg.textContent = "Error checking name.";
-        return false;
-      }
-
-      if (data.length > 0) {
-        errorMsg.textContent = "That name is already taken.";
-        return false;
-      }
+      const { data, error } = await client.from("players").select("nickname").eq("nickname", name);
+      if (error) return setError("Error checking name.");
+      if (data.length > 0) return setError("That name is already taken.");
 
       errorMsg.textContent = "";
       return true;
     }
 
-    function updatePlayButton(valid) {
-      if (valid) {
-        playBtn.classList.remove("disabled");
-        playBtn.src = "play.png";
-      } else {
-        playBtn.classList.add("disabled");
-        playBtn.src = "play_grey.png";
-      }
+    function setError(msg) {
+      errorMsg.textContent = msg;
+      return false;
     }
-
-    playBtn.addEventListener("click", async () => {
-      if (playBtn.classList.contains("disabled")) return;
-
-      const name = nicknameInput?.value?.trim();
-      const { data: { user } } = await client.auth.getUser();
-
-      const { data: player } = await client
-        .from("players")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (!player.nickname && name) {
-        const isValid = await validateNickname(name);
-        if (!isValid) return;
-
-        await client.from("players").update({ nickname: name }).eq("id", user.id);
-      }
-
-      window.location.href = "game.html";
-    });
 
     async function logout() {
       await client.auth.signOut();
       window.location.href = "login.html";
+    }
+
+    function goToGame() {
+      window.location.href = "game.html";
     }
 
     loadPlayer();
