@@ -14,11 +14,17 @@
     }
     h1 {
       font-size: 2em;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .stats {
       font-size: 1.2em;
       margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      margin: 8px;
+      font-size: 1em;
+      width: 200px;
     }
     .btn-img {
       width: 160px;
@@ -28,124 +34,78 @@
     }
     .disabled {
       pointer-events: none;
-      opacity: 0.5;
+      opacity: 0.6;
     }
-    #warning {
+    .warning {
       color: red;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    #info {
       font-size: 0.9em;
-      color: #a00;
-      margin-top: 5px;
+      margin-top: -8px;
     }
   </style>
 </head>
 <body>
   <h1>Welcome to Arena Island!</h1>
-  <div id="player-info" class="stats">Loading player data...</div>
-  <div id="nickname-section" style="display: none;">
-    <label><span style="color:red">*</span> Nickname: </label>
-    <input type="text" id="nickname-input" placeholder="Enter your nickname" />
-    <div id="warning"></div>
-    <div id="info">ⓘ Inappropriate names may result in suspension or banning.</div>
-    <br/>
-    <img src="play_grey.png" id="play-btn" class="btn-img disabled" alt="Play (Disabled)" />
-    <img src="logout.png" class="btn-img" alt="Logout" onclick="logout()" />
-  </div>
-  <div id="actions" style="display: none;">
-    <img src="play.png" class="btn-img" alt="Play" onclick="playGame()" />
-    <img src="logout.png" class="btn-img" alt="Logout" onclick="logout()" />
+  <p><strong>Please name your character</strong></p>
+  <div id="player-info" class="stats"></div>
+
+  <input type="text" id="nickname" placeholder="Enter your nickname" oninput="checkNickname()" />
+  <div class="warning">Note: Inappropriate names may result in suspension or banning.</div>
+
+  <div>
+    <img src="play_grey.png" alt="Play" class="btn-img" id="play-btn" onclick="playGame()" />
+    <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
   </div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    const forbiddenWords = ["fuck", "shit", "bitch", "nigger", "n1gg3r", "cunt", "motherfucker"];
 
-    let currentUser;
+    let userId = null;
 
     async function loadPlayer() {
       const { data: { user }, error } = await client.auth.getUser();
-      if (error || !user) return (window.location.href = "login.html");
-      currentUser = user;
-
-      const { data: player, error: playerError } = await client
-        .from('players')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (!player || playerError) {
-        document.getElementById('player-info').textContent = "Player data not found.";
+      if (error || !user) {
+        window.location.href = "login.html";
         return;
       }
-
-      if (!player.nickname) {
-        document.getElementById('nickname-section').style.display = 'block';
-        document.getElementById('player-info').innerHTML = `<p><span style="color:red">*</span> Nickname: <em>not set</em></p>`;
-        document.getElementById("nickname-input").addEventListener("input", validateNickname);
-      } else {
-        document.getElementById('actions').style.display = 'block';
-        document.getElementById('player-info').innerHTML = `
-          <p><strong>Nickname:</strong> ${player.nickname}</p>
-          <p><strong>Rating:</strong> ${player.rating}</p>
-          <p><strong>Kills:</strong> ${player.kills}</p>
-          <p><strong>Deaths:</strong> ${player.deaths}</p>
-          <p><strong>Coins:</strong> ${player.coins}</p>
-        `;
+      userId = user.id;
+      const { data: player } = await client.from('players').select('*').eq('id', userId).single();
+      if (player && player.nickname) {
+        document.getElementById("nickname").value = player.nickname;
+        document.getElementById("player-info").textContent = `* Nickname: ${player.nickname}`;
+        enablePlayButton(true);
       }
     }
 
-    async function validateNickname() {
-      const nickname = document.getElementById("nickname-input").value.trim();
-      const playBtn = document.getElementById("play-btn");
-      const warning = document.getElementById("warning");
+    function checkNickname() {
+      const nickname = document.getElementById('nickname').value.trim();
+      const isValid = nickname.length >= 2;
+      enablePlayButton(isValid);
+    }
 
-      if (!nickname) {
-        warning.textContent = "Name your character to continue.";
-        playBtn.classList.add("disabled");
-        playBtn.onclick = null;
+    function enablePlayButton(enabled) {
+      const btn = document.getElementById('play-btn');
+      btn.src = enabled ? "play.png" : "play_grey.png";
+    }
+
+    async function playGame() {
+      const nickname = document.getElementById('nickname').value.trim();
+      if (!nickname || nickname.length < 2) return;
+
+      const { data: existing } = await client.from('players').select('*').eq('nickname', nickname);
+      if (existing.length > 0 && existing[0].id !== userId) {
+        alert("Nickname already taken.");
         return;
       }
 
-      if (forbiddenWords.some(word => nickname.toLowerCase().includes(word))) {
-        warning.textContent = "This nickname contains inappropriate language.";
-        playBtn.classList.add("disabled");
-        playBtn.onclick = null;
-        return;
-      }
-
-      const { data: existing } = await client
-        .from("players")
-        .select("nickname")
-        .eq("nickname", nickname)
-        .neq("id", currentUser.id);
-
-      if (existing.length > 0) {
-        warning.textContent = "That nickname is already taken.";
-        playBtn.classList.add("disabled");
-        playBtn.onclick = null;
-        return;
-      }
-
-      warning.textContent = "";
-      playBtn.classList.remove("disabled");
-      playBtn.onclick = async () => {
-        await client.from("players").update({ nickname }).eq("id", currentUser.id);
-        window.location.reload();
-      };
+      await client.from('players').update({ nickname }).eq('id', userId);
+      alert("Game started!");
     }
 
     async function logout() {
       await client.auth.signOut();
       window.location.href = "login.html";
-    }
-
-    function playGame() {
-      alert("Launching game… (placeholder)");
     }
 
     loadPlayer();
