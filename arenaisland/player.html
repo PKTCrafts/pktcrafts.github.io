@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arena Island</title>
+  <title>Your Profile – Arena Island</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
@@ -45,35 +45,6 @@
       margin-top: 5px;
     }
 
-    #frame-container {
-      position: relative;
-      width: 1280px;
-      height: 720px;
-      margin: 40px auto;
-      display: none;
-    }
-
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1280px;
-      height: 720px;
-      border: none;
-      background-color: #000;
-      z-index: 1;
-    }
-
-    #frame-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1280px;
-      height: 720px;
-      z-index: 2;
-      pointer-events: none;
-    }
-
     #stats-section, #naming-section {
       margin-top: 20px;
     }
@@ -103,11 +74,6 @@
     <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
   </div>
 
-  <div id="frame-container">
-    <iframe src="start/index.html" allowfullscreen></iframe>
-    <img id="frame-overlay" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Game Frame" />
-  </div>
-
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
@@ -125,7 +91,6 @@
 
     const namingSection = document.getElementById("naming-section");
     const statsSection = document.getElementById("stats-section");
-    const frameContainer = document.getElementById("frame-container");
 
     const blacklist = ["cunt","fuck","shit","sh1t","nigger","n1gg3r","faggot","bitch","b1tch","bastard","asshole","dick","d1ck","cock","pussy","slut","whore","twat","nazi","hitler","h1tler","h1tl3r","hitl3r","kkk","retard","r3tard","rape","rapist","fag","dyke","tranny","gaylord","molester","pedophile","pedo","arse","spastic","goddamn","damn","hell","anal","motherfucker","suckmydick","suckdick","dicksucker","fuckface","shithead","asswipe","jerkoff","jackoff","ballsack","cum","milf","porn","boobs","tit","tits","nude","nudes","sex","hentai","incest","genital","erect","orgy","orgasm","clit","clitoris","labia","dildo","vibrator","penetrate"];
 
@@ -239,10 +204,7 @@
         await client.from("players").update({ nickname: name }).eq("id", user.id);
       }
 
-      namingSection.style.display = "none";
-      statsSection.style.display = "none";
-      playBtn.style.display = "none";
-      frameContainer.style.display = "block";
+      window.location.href = "game.html";
     });
 
     async function logout() {
