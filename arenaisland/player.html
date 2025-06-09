@@ -126,11 +126,17 @@
       }
     }
 
-    nicknameInput?.addEventListener("input", async () => {
-      const name = nicknameInput.value.trim();
-      const isValid = await validateNickname(name);
-      updatePlayButton(isValid);
-    });
+    if (!player.nickname) {
+  namingSection.style.display = "block";
+  updatePlayButton(false);
+
+  nicknameInput.addEventListener("input", async () => {
+    const name = nicknameInput.value.trim();
+    const isValid = await validateNickname(name);
+    updatePlayButton(isValid);
+  });
+}
+
 
     async function validateNickname(name) {
       const lowerName = name.toLowerCase();
