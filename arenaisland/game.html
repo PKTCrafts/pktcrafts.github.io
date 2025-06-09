@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arena Island – Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #frame-wrapper {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
+      border: none;
+      background: black;
+      z-index: 1;
+    }
+
+    #frame-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
+      pointer-events: none;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div id="frame-wrapper">
+    <iframe src="start/index.html" allowfullscreen></iframe>
+    <img id="frame-overlay" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Frame" />
+  </div>
+</body>
+</html>
