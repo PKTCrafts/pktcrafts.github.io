@@ -67,13 +67,13 @@
   <!-- Naming section -->
   <div id="naming-section" style="display: none;">
     <p><strong>Please name your character!</strong></p>
-    <input type="text" id="nickname" placeholder="Enter your name" />
-    <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
+    <input type="text" id="nickname" placeholder="" />
+    <p class="warning">Note: Inappropriate names may result in suspension or banning.</p>
     <div id="error-msg"></div>
 
     <div id="button-container">
       <img src="back.png" alt="Back" class="btn-img" onclick="logout()" />
-      <img id="next-btn" src="next_gray.png" alt="Next" class="btn-img disabled" />
+      <img id="next-btn" src="next_grey.png" alt="Next" class="btn-img disabled" />
     </div>
   </div>
 
@@ -133,7 +133,7 @@
       if (!player.nickname) {
         namingSection.style.display = "block";
         nextBtn.classList.add("disabled");
-        nextBtn.src = "next_gray.png";
+        nextBtn.src = "next_grey.png";
 
         nicknameInput.addEventListener("input", async () => {
           const isValid = await validateNickname(nicknameInput.value.trim());
@@ -142,7 +142,7 @@
             nextBtn.src = "next.png";
           } else {
             nextBtn.classList.add("disabled");
-            nextBtn.src = "next_gray.png";
+            nextBtn.src = "next_grey.png";
           }
         });
 
