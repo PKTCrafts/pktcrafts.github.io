@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Arena Island – Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
       margin: 0;
@@ -45,8 +46,26 @@
 </head>
 <body>
   <div id="frame-wrapper">
-    <iframe src="start/index.html" allowfullscreen></iframe>
+    <!-- Iframe vil kun lastes dersom brukeren er logget inn -->
+    <iframe id="game-frame" src="" allowfullscreen></iframe>
     <img id="frame-overlay" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Frame" />
   </div>
+
+  <script>
+    const client = supabase.createClient(
+      "https://ieoyoqkeiiooxgxorusu.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs"
+    );
+
+    client.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("game-frame").src = "start/index.html";
+      }
+    }).catch(() => {
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>
