@@ -112,31 +112,28 @@
         return;
       }
 
-      if (!player.nickname) {
+      const nickname = player.nickname?.trim();
+
+      if (!nickname) {
         namingSection.style.display = "block";
         updatePlayButton(false);
+
+        nicknameInput.addEventListener("input", async () => {
+          const name = nicknameInput.value.trim();
+          const isValid = await validateNickname(name);
+          updatePlayButton(isValid);
+        });
       } else {
         statsSection.style.display = "block";
         updatePlayButton(true);
-        nicknameDisplay.textContent = player.nickname;
+
+        nicknameDisplay.textContent = nickname;
         ratingDisplay.textContent = player.rating ?? "0";
         killsDisplay.textContent = player.kills ?? "0";
         deathsDisplay.textContent = player.deaths ?? "0";
         coinsDisplay.textContent = player.coins ?? "0";
       }
     }
-
-    if (!player.nickname) {
-  namingSection.style.display = "block";
-  updatePlayButton(false);
-
-  nicknameInput.addEventListener("input", async () => {
-    const name = nicknameInput.value.trim();
-    const isValid = await validateNickname(name);
-    updatePlayButton(isValid);
-  });
-}
-
 
     async function validateNickname(name) {
       const lowerName = name.toLowerCase();
