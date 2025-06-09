@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arena Island</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <p>Checking login status...</p>
+  <script>
+    const client = supabase.createClient(
+      "https://ieoyoqkeiiooxgxorusu.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs"
+    );
+
+    client.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        window.location.href = "game.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    }).catch(() => {
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
