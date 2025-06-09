@@ -90,7 +90,7 @@
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const nicknameInput = document.getElementById("nickname");
@@ -107,11 +107,17 @@
     const namingSection = document.getElementById("naming-section");
     const statsSection = document.getElementById("stats-section");
 
-    const blacklist = [..."cunt", "fuck", "shit", "nigger", "faggot", "bitch", "dick", "rape", "porn", "sex", "hitler", "kkk"];
+    const blacklist = ["cunt","fuck","shit","sh1t","nigger","n1gg3r","faggot","bitch","b1tch","bastard","asshole","dick","d1ck","cock","pussy","slut","whore","twat","nazi","hitler","h1tler","h1tl3r","hitl3r","kkk","retard","r3tard","rape","rapist","fag","dyke","tranny","gaylord","molester","pedophile","pedo","arse","spastic","goddamn","damn","hell","anal","motherfucker","suckmydick","suckdick","dicksucker","fuckface","shithead","asswipe","jerkoff","jackoff","ballsack","cum","milf","porn","boobs","tit","tits","nude","nudes","sex","hentai","incest","genital","erect","orgy","orgasm","clit","clitoris","labia","dildo","vibrator","penetrate"];
 
     async function loadPlayer() {
       const { data: { user }, error } = await client.auth.getUser();
-      if (error || !user) return (window.location.href = "login.html");
+      if (error || !user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Sørg for at spilleren eksisterer i tabellen
+      await client.from("players").upsert({ id: user.id }, { onConflict: 'id' });
 
       const { data: player, error: playerError } = await client
         .from("players")
