@@ -119,7 +119,6 @@
         return;
       }
 
-      // Opprett spiller etter registrering
       const userId = signUpData?.user?.id;
       if (userId) {
         const { data, error } = await client
@@ -133,7 +132,9 @@
         }
       }
 
-      window.location.href = "player.html";
+      // Vis bekreftelsesmelding
+      errorMsg.style.color = "red";
+      errorMsg.textContent = "A confirmation email has been sent. Please check your inbox and your spam folder.";
     }
   </script>
 </body>
