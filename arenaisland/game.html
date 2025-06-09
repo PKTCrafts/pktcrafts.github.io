@@ -19,21 +19,10 @@
     .warning {
       color: red;
       font-size: 0.9em;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     label {
       font-weight: bold;
-      font-size: 1.2em;
-    }
-    .required {
-      color: red;
-      margin-right: 5px;
-    }
-    input[type="text"] {
-      font-size: 1em;
-      padding: 5px;
-      width: 200px;
-      margin: 10px 0;
     }
     .btn-img {
       width: 160px;
@@ -41,92 +30,118 @@
       margin: 10px;
       cursor: pointer;
     }
-    #play-btn[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    #error-msg {
+      color: red;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
   <h1>Welcome to Arena Island!</h1>
-  <div><strong>Please name your character</strong></div>
-  <div class="warning">⚠️ Inappropriate names may result in suspension or banning.</div>
-  <div>
-    <label><span class="required">*</span>Name:</label>
-    <input type="text" id="name-input" placeholder="Enter your name" />
+  <p><strong>Please name your character</strong></p>
+  <p class="warning">⚠️ Inappropriate names may result in suspension or banning.</p>
+
+  <div id="player-info" class="stats">
+    <label for="nickname">* Name:</label>
+    <input type="text" id="nickname" placeholder="Enter your name" />
+    <div id="error-msg"></div>
   </div>
+
   <div>
-    <img src="play_grey.png" id="play-btn" class="btn-img" alt="Play" disabled />
+    <img id="play-btn" src="play_grey.png" alt="Play" class="btn-img disabled" />
     <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
   </div>
-  <div id="feedback" class="warning"></div>
 
   <script>
     const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    const blacklist = ["cunt", "fuck", "shit", "nigger", "n1gg3r", "faggot", "bitch", "bastard", "asshole", "dick", "cock", "pussy", "slut", "whore", "twat", "nazi", "hitler", "kkk", "retard", "rape", "rapist", "fag", "dyke", "tranny", "gaylord", "molester", "pedophile", "pedo", "arse", "spastic", "goddamn", "damn", "hell", "anal", "motherfucker", "suckmydick", "suckdick", "dicksucker", "fuckface", "shithead", "asswipe", "jerkoff", "jackoff", "ballsack", "cum", "milf", "porn", "boobs", "tit", "tits", "nude", "nudes", "sex", "hentai", "incest", "genital", "erect", "orgy", "orgasm", "clit", "clitoris", "labia", "dildo", "vibrator", "penetrate"];
 
-    let currentUser = null;
+    const playBtn = document.getElementById("play-btn");
+    const nicknameInput = document.getElementById("nickname");
+    const errorMsg = document.getElementById("error-msg");
+    
+    const blacklist = ["cunt", "fuck", "shit", "sh1t", "nigger", "n1gg3r", "faggot", "bitch", "b1tch", "bastard", "asshole", "dick", "d1ck", "cock", "pussy", "slut", "whore", "twat", "nazi", "hitler", "h1tler", "h1tl3r", "hitl3r", "kkk", "retard", "r3tard", "rape", "rapist", "fag", "dyke", "tranny", "gaylord", "molester", "pedophile", "pedo", "arse", "spastic", "goddamn", "damn", "hell", "anal", "motherfucker", "suckmydick", "suckdick", "dicksucker", "fuckface", "shithead", "asswipe", "jerkoff", "jackoff", "ballsack", "cum", "milf", "porn", "boobs", "tit", "tits", "nude", "nudes", "sex", "hentai", "incest", "genital", "erect", "orgy", "orgasm", "clit", "clitoris", "labia", "dildo", "vibrator", "penetrate"];
 
-    async function init() {
-      const { data: { user }, error } = await client.auth.getUser();
-      if (error || !user) {
-        window.location.href = "login.html";
-        return;
-      }
-      currentUser = user;
-    }
-
-    function isNameValid(name) {
-      const lower = name.toLowerCase();
-      return !blacklist.some(word => lower.includes(word));
-    }
-
-    document.getElementById("name-input").addEventListener("input", async (e) => {
-      const name = e.target.value.trim();
-      const playBtn = document.getElementById("play-btn");
-      const feedback = document.getElementById("feedback");
-
-      if (name.length === 0) {
-        playBtn.src = "play_grey.png";
-        playBtn.removeAttribute("onclick");
-        feedback.textContent = "";
-        return;
-      }
-
-      if (!isNameValid(name)) {
-        playBtn.src = "play_grey.png";
-        playBtn.removeAttribute("onclick");
-        feedback.textContent = "That name is not allowed.";
-        return;
-      }
-
-      const { data: exists } = await client.from('players').select('nickname').eq('nickname', name);
-      if (exists && exists.length > 0) {
-        playBtn.src = "play_grey.png";
-        playBtn.removeAttribute("onclick");
-        feedback.textContent = "That name is already taken.";
-        return;
-      }
-
-      playBtn.src = "play.png";
-      playBtn.setAttribute("onclick", "saveAndPlay()")
-      feedback.textContent = "";
+   nicknameInput.addEventListener("input", async () => {
+      const name = nicknameInput.value.trim();
+      const isValid = await validateNickname(name);
+      updatePlayButton(isValid);
     });
 
-    async function saveAndPlay() {
-      const name = document.getElementById("name-input").value.trim();
-      await client.from('players').update({ nickname: name }).eq('id', currentUser.id);
-      window.location.href = "game.html";
+    async function validateNickname(name) {
+      const lowerName = name.toLowerCase();
+
+      if (!name) {
+        errorMsg.textContent = "Name cannot be empty.";
+        return false;
+      }
+
+      if (name.length < 2 || name.length > 16) {
+        errorMsg.textContent = "Name must be between 2 and 16 characters.";
+        return false;
+      }
+
+      const allowedPattern = /^[a-zA-Z0-9_ ]+$/;
+      if (!allowedPattern.test(name)) {
+        errorMsg.textContent = "Only letters, numbers, spaces and underscores are allowed.";
+        return false;
+      }
+
+      if (blacklist.includes(lowerName)) {
+        errorMsg.textContent = "That name is inappropriate.";
+        return false;
+      }
+
+      const { data, error } = await client
+        .from("players")
+        .select("nickname")
+        .eq("nickname", name);
+
+      if (error) {
+        errorMsg.textContent = "Error checking name.";
+        return false;
+      }
+
+      if (data.length > 0) {
+        errorMsg.textContent = "That name is already taken.";
+        return false;
+      }
+
+      errorMsg.textContent = "";
+      return true;
     }
+
+    function updatePlayButton(valid) {
+      if (valid) {
+        playBtn.classList.remove("disabled");
+        playBtn.src = "play.png";
+      } else {
+        playBtn.classList.add("disabled");
+        playBtn.src = "play_grey.png";
+      }
+    }
+
+    playBtn.addEventListener("click", async () => {
+      if (playBtn.classList.contains("disabled")) return;
+
+      const name = nicknameInput.value.trim();
+      const isValid = await validateNickname(name);
+      if (!isValid) return;
+
+      const user = (await client.auth.getUser()).data.user;
+      await client.from("players").update({ nickname: name }).eq("id", user.id);
+      window.location.href = "start.html";
+    });
 
     async function logout() {
       await client.auth.signOut();
       window.location.href = "login.html";
     }
-
-    init();
   </script>
 </body>
 </html>
