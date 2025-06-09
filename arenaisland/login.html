@@ -94,7 +94,7 @@
         return;
       }
 
-      const { error } = await client.auth.signInWithPassword({ email, password });
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
 
       if (error) {
         errorMsg.textContent = "Login failed: " + error.message;
@@ -112,13 +112,28 @@
         return;
       }
 
-      const { error } = await client.auth.signUp({ email, password });
+      const { data: signUpData, error: signUpError } = await client.auth.signUp({ email, password });
 
-      if (error) {
-        errorMsg.textContent = "Registration failed: " + error.message;
-      } else {
-        window.location.href = "player.html";
+      if (signUpError) {
+        errorMsg.textContent = "Registration failed: " + signUpError.message;
+        return;
       }
+
+      // Opprett spiller etter registrering
+      const userId = signUpData?.user?.id;
+      if (userId) {
+        const { data, error } = await client
+          .from("players")
+          .select("id")
+          .eq("id", userId)
+          .maybeSingle();
+
+        if (!data && !error) {
+          await client.from("players").insert({ id: userId });
+        }
+      }
+
+      window.location.href = "player.html";
     }
   </script>
 </body>
