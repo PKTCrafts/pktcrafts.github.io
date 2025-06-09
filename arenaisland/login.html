@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login – Arena Island</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Welcome to Arena Island</title>
   <style>
     body {
       font-family: sans-serif;
@@ -14,63 +13,31 @@
       padding-top: 80px;
     }
 
-    input {
-      padding: 10px;
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+
+    .btn-img {
+      width: 160px;
+      height: auto;
       margin: 10px;
-      width: 220px;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      margin-top: 20px;
       cursor: pointer;
-    }
-
-    #error-msg {
-      color: red;
-      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Login to Arena Island</h1>
-  <input type="email" id="email" placeholder="Email" />
-  <br />
-  <input type="password" id="password" placeholder="Password" />
-  <br />
-  <button onclick="login()">Login / Register</button>
-  <div id="error-msg"></div>
+  <h1>Welcome to Arena Island!</h1>
+  <p>Register or Login to start your adventure!</p>
 
-  <script>
-    const client = supabase.createClient(
-      "https://ieoyoqkeiiooxgxorusu.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs"
-    );
-
-    async function login() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorMsg = document.getElementById("error-msg");
-
-      const { data, error } = await client.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        // Prøv registrering
-        const { error: signUpError } = await client.auth.signUp({ email, password });
-        if (signUpError) {
-          errorMsg.textContent = signUpError.message;
-        } else {
-          window.location.href = "player.html";
-        }
-      } else {
-        window.location.href = "player.html";
-      }
-    }
-  </script>
+  <div>
+    <a href="register.html"><img src="register.png" alt="Register" class="btn-img" /></a>
+    <a href="login_form.html"><img src="login.png" alt="Login" class="btn-img" /></a>
+  </div>
 </body>
 </html>
