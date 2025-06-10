@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Profile – Arena Island</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 40px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .form-row label {
+      width: 80px;
+      text-align: right;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 220px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #66afe9;
+      box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+    }
+
+    .warning {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 10px;
+    }
+
+    .btn-img {
+      width: 160px;
+      height: auto;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    #error-msg {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    #stats-section, #naming-section {
+      margin-top: 20px;
+    }
+
+    #button-container {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Arena Island!</h1>
+
+  <!-- Naming section -->
+  <div id="naming-section" style="display: none;">
+    <p><strong>Please name your character!</strong></p>
+
+    <div class="form-row">
+      <label for="nickname">Name:</label>
+      <input type="text" id="nickname" placeholder="Enter your name" />
+    </div>
+    <div id="error-msg"></div>
+
+    <div id="button-container">
+      <img src="back.png" alt="Back" class="btn-img" onclick="logout()" />
+      <img id="next-btn" src="next_grey.png" alt="Next" class="btn-img disabled" />
+    </div>
+
+    <p class="warning">Note: Inappropriate names may result in suspension or banning.</p>
+  </div>
+
+  <!-- Stats section -->
+  <div id="stats-section" style="display: none;">
+    <p><strong>Nickname:</strong> <span id="nickname-display"></span></p>
+    <p><strong>Rating:</strong> <span id="rating"></span></p>
+    <p><strong>Kills:</strong> <span id="kills"></span></p>
+    <p><strong>Deaths:</strong> <span id="deaths"></span></p>
+    <p><strong>Coins:</strong> <span id="coins"></span></p>
+    <img id="play-btn" src="play.png" alt="Play" class="btn-img" onclick="goToGame()" />
+    <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const nicknameInput = document.getElementById("nickname");
+    const errorMsg = document.getElementById("error-msg");
+    const nextBtn = document.getElementById("next-btn");
+    const playBtn = document.getElementById("play-btn");
+
+    const nicknameDisplay = document.getElementById("nickname-display");
+    const ratingDisplay = document.getElementById("rating");
+    const killsDisplay = document.getElementById("kills");
+    const deathsDisplay = document.getElementById("deaths");
+    const coinsDisplay = document.getElementById("coins");
+
+    const namingSection = document.getElementById("naming-section");
+    const statsSection = document.getElementById("stats-section");
+
+    const blacklist = ["cunt","fuck","shit","sh1t","nigger","n1gg3r","faggot","bitch","b1tch","bastard","asshole","dick","d1ck","cock","pussy","slut","whore","twat","nazi","hitler","h1tler","h1tl3r","hitl3r","kkk","retard","r3tard","rape","rapist","fag","dyke","tranny","gaylord","molester","pedophile","pedo","arse","spastic","goddamn","damn","hell","anal","motherfucker","suckmydick","suckdick","dicksucker","fuckface","shithead","asswipe","jerkoff","jackoff","ballsack","cum","milf","porn","boobs","tit","tits","nude","nudes","sex","hentai","incest","genital","erect","orgy","orgasm","clit","clitoris","labia","dildo","vibrator","penetrate"];
+
+    async function loadPlayer() {
+      const { data: { user }, error } = await client.auth.getUser();
+      if (error || !user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      await client.from("players").upsert({ id: user.id }, { onConflict: 'id' });
+
+      const { data: player, error: playerError } = await client
+        .from("players")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (playerError || !player) {
+        errorMsg.textContent = "Player not found.";
+        return;
+      }
+
+      if (!player.nickname) {
+        namingSection.style.display = "block";
+        nextBtn.classList.add("disabled");
+        nextBtn.src = "next_grey.png";
+
+        nicknameInput.addEventListener("input", async () => {
+          const isValid = await validateNickname(nicknameInput.value.trim());
+          if (isValid) {
+            nextBtn.classList.remove("disabled");
+            nextBtn.src = "next.png";
+          } else {
+            nextBtn.classList.add("disabled");
+            nextBtn.src = "next_grey.png";
+          }
+        });
+
+        nextBtn.addEventListener("click", async () => {
+          if (nextBtn.classList.contains("disabled")) return;
+          const name = nicknameInput.value.trim();
+          await client.from("players").update({ nickname: name }).eq("id", user.id);
+          window.location.reload();
+        });
+      } else {
+        statsSection.style.display = "block";
+        nicknameDisplay.textContent = player.nickname;
+        ratingDisplay.textContent = player.rating ?? "0";
+        killsDisplay.textContent = player.kills ?? "0";
+        deathsDisplay.textContent = player.deaths ?? "0";
+        coinsDisplay.textContent = player.coins ?? "0";
+      }
+    }
+
+    async function validateNickname(name) {
+      const lowerName = name.toLowerCase();
+      if (!name) return setError("Name cannot be empty.");
+      if (name.length < 2 || name.length > 16) return setError("Name must be between 2 and 16 characters.");
+      if (!/^[a-zA-Z0-9_ ]+$/.test(name)) return setError("Only letters, numbers, spaces and underscores are allowed.");
+      if (blacklist.includes(lowerName)) return setError("That name is inappropriate.");
+
+      const { data, error } = await client.from("players").select("nickname").eq("nickname", name);
+      if (error) return setError("Error checking name.");
+      if (data.length > 0) return setError("That name is already taken.");
+
+      errorMsg.textContent = "";
+      return true;
+    }
+
+    function setError(msg) {
+      errorMsg.textContent = msg;
+      return false;
+    }
+
+    async function logout() {
+      await client.auth.signOut();
+      window.location.href = "login.html";
+    }
+
+    function goToGame() {
+      window.location.href = "game.html";
+    }
+
+    loadPlayer();
+  </script>
+</body>
+</html>

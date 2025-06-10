@@ -3,128 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arena Island</title>
+  <title>Arena Island – Game</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
-      padding-top: 50px;
-      background: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    .btn-img {
-      width: 160px;
-      height: auto;
-      margin: 10px;
-      cursor: pointer;
-    }
-
-    .disabled {
-      pointer-events: none;
-      opacity: 0.6;
-    }
-
-    #error-msg {
-      color: red;
-      margin-top: 5px;
-    }
-
-    #game-container {
+    #frame-wrapper {
       position: relative;
-      width: 960px;
-      height: 540px;
-      margin: 0 auto;
+      width: 1280px;
+      height: 720px;
     }
 
-    #game-iframe {
+    iframe {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
       border: none;
+      background: black;
       z-index: 1;
     }
 
-    #game-frame {
+    #frame-overlay {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
       pointer-events: none;
+      z-index: 2;
     }
   </style>
 </head>
 <body>
-  <!-- Stats-skjerm -->
-  <div id="stats-section">
-    <p><strong>Nickname:</strong> <span id="nickname-display"></span></p>
-    <p><strong>Rating:</strong> <span id="rating"></span></p>
-    <p><strong>Kills:</strong> <span id="kills"></span></p>
-    <p><strong>Deaths:</strong> <span id="deaths"></span></p>
-    <p><strong>Coins:</strong> <span id="coins"></span></p>
-    <div>
-      <img id="play-btn" src="play.png" alt="Play" class="btn-img" />
-      <img src="logout.png" alt="Logout" class="btn-img" onclick="logout()" />
-    </div>
-  </div>
-
-  <!-- Spill-skjerm -->
-  <div id="game-section" style="display: none;">
-    <div id="game-container">
-      <iframe id="game-iframe" src="start/index.html"></iframe>
-      <img id="game-frame" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Game Frame" />
-    </div>
+  <div id="frame-wrapper">
+    <!-- Iframe vil kun lastes dersom brukeren er logget inn -->
+    <iframe id="game-frame" src="" allowfullscreen></iframe>
+    <img id="frame-overlay" src="https://pktcrafts.github.io/arenaisland/game_frame.png" alt="Frame" />
   </div>
 
   <script>
-    const SUPABASE_URL = "https://ieoyoqkeiiooxgxorusu.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const client = supabase.createClient(
+      "https://ieoyoqkeiiooxgxorusu.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllb3lvcWtlaWlvb3hneG9ydXN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNzgxMTEsImV4cCI6MjA2NDk1NDExMX0.U5AjgGs9WUSolW3aGmETF83D8Lqxm9-EIvSYO7iE3Vs"
+    );
 
-    const nicknameDisplay = document.getElementById("nickname-display");
-    const ratingDisplay = document.getElementById("rating");
-    const killsDisplay = document.getElementById("kills");
-    const deathsDisplay = document.getElementById("deaths");
-    const coinsDisplay = document.getElementById("coins");
-    const statsSection = document.getElementById("stats-section");
-    const gameSection = document.getElementById("game-section");
-    const playBtn = document.getElementById("play-btn");
-
-    async function loadPlayer() {
-      const { data: { user }, error } = await client.auth.getUser();
-      if (error || !user) {
+    client.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
         window.location.href = "login.html";
-        return;
+      } else {
+        document.getElementById("game-frame").src = "start/index.html";
       }
-
-      const { data: player, error: playerError } = await client
-        .from("players")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (playerError || !player) {
-        return;
-      }
-
-      nicknameDisplay.textContent = player.nickname || "Unnamed";
-      ratingDisplay.textContent = player.rating ?? "0";
-      killsDisplay.textContent = player.kills ?? "0";
-      deathsDisplay.textContent = player.deaths ?? "0";
-      coinsDisplay.textContent = player.coins ?? "0";
-    }
-
-    playBtn.addEventListener("click", () => {
-      statsSection.style.display = "none";
-      gameSection.style.display = "block";
-    });
-
-    async function logout() {
-      await client.auth.signOut();
+    }).catch(() => {
       window.location.href = "login.html";
-    }
-
-    loadPlayer();
+    });
   </script>
 </body>
 </html>
