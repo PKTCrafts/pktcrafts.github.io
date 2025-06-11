@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ll7pu1v58wh3"
-path="res://.godot/imported/index.icon.png-7458b6369b562464941a1177729590ae.ctex"
+uid="uid://ccay2dujvn7wa"
+path="res://.godot/imported/index.icon.png-b4ba16c68622a649bd8caff63e943f57.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://arena-island/build/web/1422/index.icon.png"
-dest_files=["res://.godot/imported/index.icon.png-7458b6369b562464941a1177729590ae.ctex"]
+source_file="res://arena-island/build/web/10062025-0943/index.icon.png"
+dest_files=["res://.godot/imported/index.icon.png-b4ba16c68622a649bd8caff63e943f57.ctex"]
 
 [params]
 
