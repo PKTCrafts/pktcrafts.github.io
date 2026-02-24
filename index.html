@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>PKT Crafts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="assets/PKT_favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/PKT_favicon.png" type="image/png" />
+
   <style>
     header {
       display: flex;
@@ -19,9 +21,8 @@
       z-index: 100;
       flex-wrap: wrap;
     }
-    .logo {
-      height: 80px;
-    }
+    .logo { height: 80px; }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -33,6 +34,7 @@
       height: 3px;
       background-color: #333;
     }
+
     .main-nav {
       display: flex;
       gap: 2rem;
@@ -41,12 +43,8 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    .main-nav.hidden {
-      display: none !important;
-    }
-    .main-nav.active {
-      display: flex !important;
-    }
+    .main-nav.active { display: flex !important; }
+
     .social-icons {
       display: flex;
       align-items: center;
@@ -58,6 +56,7 @@
       width: 16px;
       height: 16px;
     }
+
     .gallery-container {
       max-width: 1000px;
       margin: 4rem auto;
@@ -77,9 +76,8 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
-    .gallery-grid img:hover {
-      transform: scale(1.03);
-    }
+    .gallery-grid img:hover { transform: scale(1.03); }
+
     .lightbox {
       display: none;
       position: fixed;
@@ -97,9 +95,8 @@
       max-height: 90%;
       border-radius: 10px;
     }
-    .lightbox.active {
-      display: flex;
-    }
+    .lightbox.active { display: flex; }
+
     .contact-container {
       display: flex;
       flex-direction: row;
@@ -107,16 +104,7 @@
       align-items: flex-start;
       flex-wrap: wrap;
     }
-    .contact form {
-      flex: 1;
-      min-width: 300px;
-    }
-    .store-embed {
-      flex: 1;
-      min-width: 300px;
-      max-width: 500px;
-      margin-top: 32px;
-    }
+
     @media (max-width: 768px) {
       .main-nav {
         display: none;
@@ -125,108 +113,123 @@
         gap: 1rem;
         margin-top: 1rem;
       }
-      .main-nav.active {
-        display: flex !important;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .logo {
-        height: 50px;
-      }
+      .main-nav.active { display: flex !important; }
+      .hamburger { display: flex; }
+      .logo { height: 50px; }
       .social-icons {
         margin-top: 0.5rem;
         border-left: none;
         padding-left: 0;
       }
-      .contact-container {
-        flex-direction: column;
-      }
+      .contact-container { flex-direction: column; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <a href="#">
-      <img src="assets/logo.png" alt="PKT Crafts logo" class="logo">
+      <img src="assets/logo.png" alt="PKT Crafts logo" class="logo" />
     </a>
-    <div class="hamburger" onclick="toggleMenu()">
-      <div></div>
-      <div></div>
-      <div></div>
+
+    <div class="hamburger" aria-label="Open menu" role="button" tabindex="0" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
     </div>
-    <nav class="main-nav">
+
+    <nav class="main-nav" id="main-nav">
       <a href="#">Home</a>
       <a href="#contact">Contact</a>
       <a href="#gallery">Gallery</a>
-      <a href="https://www.crafting-for-hope.com/" target="_blank">Crafting For Hope</a>
-      <a href="https://pktcrafts.creator-spring.com" target="_blank">Merch</a>
+      <a href="https://www.crafting-for-hope.com/" target="_blank" rel="noopener noreferrer">Crafting For Hope</a>
+      <a href="https://pktcrafts.creator-spring.com" target="_blank" rel="noopener noreferrer">Merch</a>
     </nav>
+
     <div class="social-icons">
-      <a href="https://youtube.com/@pktcrafts" target="_blank">
-        <img src="assets/YT_favicon.png" alt="YouTube">
+      <a href="https://youtube.com/@pktcrafts" target="_blank" rel="noopener noreferrer">
+        <img src="assets/YT_favicon.png" alt="YouTube" />
       </a>
-      <a href="https://www.instagram.com/pkt_crafts/" target="_blank">
-        <img src="assets/IG_favicon.png" alt="Instagram">
+      <a href="https://www.instagram.com/pkt_crafts/" target="_blank" rel="noopener noreferrer">
+        <img src="assets/IG_favicon.png" alt="Instagram" />
       </a>
-      <a href="https://www.patreon.com/c/PKTCrafts" target="_blank">
-        <img src="assets/Patreon_favicon.png" alt="Patreon">
+      <a href="https://www.patreon.com/c/PKTCrafts" target="_blank" rel="noopener noreferrer">
+        <img src="assets/Patreon_favicon.png" alt="Patreon" />
       </a>
     </div>
   </header>
 
   <main>
     <section class="intro">
-      <h1>Welcome!</h1>
-      <p>My name is Per, and I’m the guy behind PKT Crafts. I’m passionate about making dioramas and a variety of other creative projects.</p>
-      <p>My <a href="https://youtube.com/@pktcrafts" target="_blank">YouTube channel</a> is where I share my love for crafting, with the hope of not only entertaining you but also inspiring you to create something of your own.</p>
-      <p>I enjoy experimenting with different styles and materials, always challenging myself to bring new ideas to life in miniature form.</p>
-      <p>Whether you’re here for the artistry or just curious about the process, I hope my work sparks your imagination!</p>
+      <h1>Welcome to PKT Crafts</h1>
+      <p>My name is Per, a diorama and miniature builder based in Norway.</p>
+      <p>
+        My <a href="https://youtube.com/@pktcrafts" target="_blank" rel="noopener noreferrer">YouTube channel</a>
+        is where I share my building process and love for crafting.
+      </p>
+      <p>Whether you’re here for commissions, the artistry or just curious about the process, I hope you find what you're looking for!</p>
     </section>
-  
-  <main>
+
     <section class="gallery-container" id="gallery">
       <h2 style="text-align: left;">Gallery</h2>
       <p class="gallery-description">A small selection of what I’ve been working on in recent years.</p>
       <div class="gallery-grid" id="gallery-grid"></div>
     </section>
-    <div class="lightbox" id="lightbox">
-      <img src="" alt="Expanded view">
+
+    <div class="lightbox" id="lightbox" aria-label="Image lightbox">
+      <img src="" alt="Expanded view" />
     </div>
 
-<section class="contact" id="contact">
-  <h2>Contact</h2>
-  <p class="contact-description">Got a question, idea, or just want to say hi?</p>
-  <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
-  <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out.</p>
-  <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
-  
-  <div class="contact-container">
-    <div>
-      <p style="font-weight: bold; margin-top: 1rem;">Send an email to:</p>
-      <p id="email" style="font-size: 1.1rem;"></p>
-      <script>
-        const user = 'pktcraftscontact';
-        const domain = 'gmail.com';
-        const emailText = `${user}@${domain}`;
-        const emailLink = `<a href="mailto:${emailText}" style="color: #000; text-decoration: underline;">${emailText}</a>`;
-        document.getElementById('email').innerHTML = emailLink;
-      </script>
-    </div>
-</section>
+    <section class="contact" id="contact">
+      <h2>Contact</h2>
+      <p class="contact-description">Got a question, idea, or just want to say hi?</p>
+      <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
+      <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out.</p>
+      <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
 
+      <div class="contact-container">
+        <div>
+          <p style="font-weight: bold; margin-top: 1rem;">Send an email to:</p>
+          <p id="email" style="font-size: 1.1rem;"></p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>© 2025 PKT Crafts. All rights reserved.</p>
+    <p>© <span id="year"></span> PKT Crafts. All rights reserved.</p>
   </footer>
 
   <script>
+    // --- Menu ---
     function toggleMenu() {
-      const nav = document.querySelector('.main-nav');
-      nav.classList.toggle('hidden');
+      const nav = document.getElementById('main-nav');
+      nav.classList.toggle('active');
     }
 
+    // Allow Enter/Space on hamburger
+    document.querySelector('.hamburger')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') toggleMenu();
+    });
+
+    // Close mobile menu after clicking any nav link
+    document.querySelectorAll('#main-nav a').forEach((a) => {
+      a.addEventListener('click', () => {
+        document.getElementById('main-nav').classList.remove('active');
+      });
+    });
+
+    // --- Email obfuscation ---
+    (function injectEmail() {
+      const user = 'pktcraftscontact';
+      const domain = 'gmail.com';
+      const emailText = `${user}@${domain}`;
+      const emailLink = `<a href="mailto:${emailText}" style="color: #000; text-decoration: underline;">${emailText}</a>`;
+      document.getElementById('email').innerHTML = emailLink;
+    })();
+
+    // --- Footer year ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- Gallery + Lightbox ---
     const gallery = document.getElementById('gallery-grid');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = lightbox.querySelector('img');
@@ -235,25 +238,58 @@
     const repoName = 'pktcrafts.github.io';
     const directoryPath = 'assets/gallery';
 
+    // --- Click logging ---
+    // IMPORTANT: Do NOT put Google API keys in frontend code.
+    // Replace this with your own server/AppScript endpoint that accepts JSON {timestamp, action, elementId}
+    const LOG_ENDPOINT = ''; // e.g. 'https://script.google.com/macros/s/XXXX/exec'
+
+    function logClick(action, elementId) {
+      if (!LOG_ENDPOINT) return; // logging disabled until you set an endpoint
+
+      const payload = {
+        timestamp: new Date().toISOString(),
+        action,
+        elementId
+      };
+
+      fetch(LOG_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(() => {
+        // Intentionally silent: logging should never break UX
+      });
+    }
+
     async function fetchImages() {
       const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
       try {
         const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
         const data = await response.json();
-        data.forEach(file => {
-          if (file.type === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+
+        data.forEach((file, idx) => {
+          if (file.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
             const img = document.createElement('img');
             img.src = file.download_url;
             img.alt = file.name;
+            img.loading = 'lazy';
+            img.dataset.logId = `gallery-img-${idx + 1}`;
+
             img.addEventListener('click', () => {
+              // lightbox
               lightboxImage.src = file.download_url;
               lightbox.classList.add('active');
+
+              // log
+              logClick('Gallery image clicked', img.dataset.logId);
             });
+
             gallery.appendChild(img);
           }
         });
       } catch (error) {
-        console.error('Feil ved henting av bilder:', error);
+        console.error('Error fetching images:', error);
       }
     }
 
@@ -262,34 +298,7 @@
       lightboxImage.src = '';
     });
 
-    fetchImages();
-  </script>
-    <script>
-  const API_KEY = 'AIzaSyDhvfUx579Uto0advGjbE3w3w7vOiFxb9k';
-  const SHEET_ID = '1tc2rkVgUxJLij34akTnioJG2x0sIwvtPMKt_MrogXcQ';
-  const SHEET_NAME = 'Logg';
-
-  function logClick(action, elementId) {
-    const timestamp = new Date().toISOString();
-    const values = [[timestamp, action, elementId]];
-    const body = JSON.stringify({ values });
-
-    fetch(https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:C1:append?valueInputOption=RAW&key=${API_KEY}, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body
-    }).then(res => {
-      if (!res.ok) console.error('Log failed:', res.statusText);
-    }).catch(err => console.error('Error logging click:', err));
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.gallery-grid img').forEach((img, i) => {
-      img.addEventListener('click', () => {
-        logClick('Gallery image clicked', gallery-img-${i + 1});
-      });
-    });
-
+    // Log nav + social clicks
     document.querySelectorAll('.main-nav a').forEach((link) => {
       link.addEventListener('click', () => {
         logClick('Nav link clicked', link.textContent.trim());
@@ -301,7 +310,8 @@
         logClick('Social icon clicked', iconLink.href);
       });
     });
-  });
-</script>
+
+    fetchImages();
+  </script>
 </body>
 </html>
