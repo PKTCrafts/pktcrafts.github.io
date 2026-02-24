@@ -180,10 +180,7 @@
 
     <section class="contact" id="contact">
       <h2>Contact</h2>
-      <p class="contact-description">Got a question, idea, or just want to say hi?</p>
-      <p>I'm always happy to hear from fellow crafters, creatives, and curious minds.</p>
-      <p>If you're interested in a collaboration, want to discuss a commission, or simply have a comment about my videos or work, feel free to reach out.</p>
-      <p>Please note: If you're contacting me about a custom project, I usually document the process on video — this means a longer delivery time.</p>
+      <p class="contact-description">If you want to discuss a commission, would be interested to collaborate with me, or simply have a comment about my work, feel free to reach out.</p>
 
       <div class="contact-container">
         <div>
@@ -237,14 +234,6 @@
     const repoOwner = 'PKTCrafts';
     const repoName = 'pktcrafts.github.io';
     const directoryPath = 'assets/gallery';
-
-    // --- Click logging ---
-    // IMPORTANT: Do NOT put Google API keys in frontend code.
-    // Replace this with your own server/AppScript endpoint that accepts JSON {timestamp, action, elementId}
-    const LOG_ENDPOINT = ''; // e.g. 'https://script.google.com/macros/s/XXXX/exec'
-
-    function logClick(action, elementId) {
-      if (!LOG_ENDPOINT) return; // logging disabled until you set an endpoint
 
       const payload = {
         timestamp: new Date().toISOString(),
