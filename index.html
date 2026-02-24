@@ -35,6 +35,7 @@
       background-color: #333;
     }
 
+    /* Desktop nav unchanged */
     .main-nav {
       display: flex;
       gap: 2rem;
@@ -43,7 +44,6 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    .main-nav.active { display: flex !important; }
 
     .social-icons {
       display: flex;
@@ -105,22 +105,34 @@
       flex-wrap: wrap;
     }
 
+    /* MOBILE ONLY */
     @media (max-width: 768px) {
+      /* 1) Menu hidden by default; shown only when .active is added */
       .main-nav {
         display: none;
         flex-direction: column;
         width: 100%;
         gap: 1rem;
         margin-top: 1rem;
+
+        /* 2) Center all menu items */
+        align-items: center;
+        text-align: center;
       }
       .main-nav.active { display: flex !important; }
+
       .hamburger { display: flex; }
       .logo { height: 50px; }
+
+      /* Social icons centered on their own row, like menu items */
       .social-icons {
-        margin-top: 0.5rem;
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
         border-left: none;
         padding-left: 0;
       }
+
       .contact-container { flex-direction: column; }
     }
   </style>
@@ -196,7 +208,7 @@
   </footer>
 
   <script>
-    // --- Menu ---
+    // --- Menu (mobile opens/closes via .active) ---
     function toggleMenu() {
       const nav = document.getElementById('main-nav');
       nav.classList.toggle('active');
@@ -235,21 +247,6 @@
     const repoName = 'pktcrafts.github.io';
     const directoryPath = 'assets/gallery';
 
-      const payload = {
-        timestamp: new Date().toISOString(),
-        action,
-        elementId
-      };
-
-      fetch(LOG_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).catch(() => {
-        // Intentionally silent: logging should never break UX
-      });
-    }
-
     async function fetchImages() {
       const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
       try {
@@ -257,21 +254,16 @@
         if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
         const data = await response.json();
 
-        data.forEach((file, idx) => {
+        data.forEach((file) => {
           if (file.type === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
             const img = document.createElement('img');
             img.src = file.download_url;
             img.alt = file.name;
             img.loading = 'lazy';
-            img.dataset.logId = `gallery-img-${idx + 1}`;
 
             img.addEventListener('click', () => {
-              // lightbox
               lightboxImage.src = file.download_url;
               lightbox.classList.add('active');
-
-              // log
-              logClick('Gallery image clicked', img.dataset.logId);
             });
 
             gallery.appendChild(img);
@@ -285,19 +277,6 @@
     lightbox.addEventListener('click', () => {
       lightbox.classList.remove('active');
       lightboxImage.src = '';
-    });
-
-    // Log nav + social clicks
-    document.querySelectorAll('.main-nav a').forEach((link) => {
-      link.addEventListener('click', () => {
-        logClick('Nav link clicked', link.textContent.trim());
-      });
-    });
-
-    document.querySelectorAll('.social-icons a').forEach((iconLink) => {
-      iconLink.addEventListener('click', () => {
-        logClick('Social icon clicked', iconLink.href);
-      });
     });
 
     fetchImages();
