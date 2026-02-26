@@ -28,6 +28,7 @@
       flex-direction: column;
       cursor: pointer;
       gap: 4px;
+      user-select: none;
     }
     .hamburger div {
       width: 25px;
@@ -35,6 +36,7 @@
       background-color: #333;
     }
 
+    /* Desktop nav */
     .main-nav {
       display: flex;
       gap: 2rem;
@@ -104,28 +106,65 @@
       flex-wrap: wrap;
     }
 
+    /* MOBILE ONLY */
     @media (max-width: 768px) {
-      .main-nav {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        gap: 1rem;
-        margin-top: 1rem;
-        align-items: center;
-        text-align: center;
+      header {
+        padding: 0.75rem 1rem;
       }
-      .main-nav.active { display: flex !important; }
 
       .hamburger { display: flex; }
       .logo { height: 50px; }
 
+      /* Dropdown menu: hidden by default, overlay under header when active */
+      .main-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        display: flex;              /* keep flex, but collapse via max-height */
+        flex-direction: column;
+        gap: 0.9rem;
+
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+        padding: 0 1rem;            /* padding when closed is handled by max-height */
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 220ms ease;
+
+        align-items: center;
+        text-align: center;
+
+        margin: 0;                  /* kill desktop margins */
+        z-index: 200;
+      }
+
+      .main-nav.active {
+        max-height: 70vh;           /* enough to show menu without taking over */
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+
+      /* Hide socials on mobile unless menu open */
       .social-icons {
+        display: none;
         width: 100%;
         justify-content: center;
-        margin-top: 1rem;
         border-left: none;
         padding-left: 0;
+        margin: 0;
+        gap: 0.75rem;
       }
+      .main-nav.active ~ .social-icons {
+        display: flex;
+        padding-bottom: 0.75rem;
+      }
+
+      /* Make header a positioning context for absolute nav (sticky counts as positioned) */
+      header { position: sticky; }
 
       .contact-container { flex-direction: column; }
     }
@@ -134,7 +173,6 @@
   <!-- GoatCounter Analytics -->
   <script data-goatcounter="https://pktcrafts.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
-
 </head>
 
 <body>
@@ -143,11 +181,11 @@
       <img src="assets/logo.png" alt="PKT Crafts logo" class="logo" />
     </a>
 
-    <div class="hamburger" aria-label="Open menu" role="button" tabindex="0" onclick="toggleMenu()">
+    <div class="hamburger" id="hamburger" aria-label="Open menu" role="button" tabindex="0" aria-expanded="false">
       <div></div><div></div><div></div>
     </div>
 
-    <nav class="main-nav" id="main-nav">
+    <nav class="main-nav" id="main-nav" aria-label="Main menu">
       <a href="#">Home</a>
       <a href="#contact">Contact</a>
       <a href="#gallery">Gallery</a>
@@ -155,7 +193,7 @@
       <a href="https://pktcrafts.creator-spring.com" target="_blank" rel="noopener noreferrer">Merch</a>
     </nav>
 
-    <div class="social-icons">
+    <div class="social-icons" aria-label="Social links">
       <a href="https://youtube.com/@pktcrafts" target="_blank" rel="noopener noreferrer">
         <img src="assets/YT_favicon.png" alt="YouTube" />
       </a>
@@ -207,21 +245,49 @@
   </footer>
 
   <script>
-    function toggleMenu() {
-      const nav = document.getElementById('main-nav');
-      nav.classList.toggle('active');
+    // --- Mobile menu toggle (default collapsed) ---
+    const nav = document.getElementById('main-nav');
+    const hamburger = document.getElementById('hamburger');
+
+    function setMenuOpen(isOpen) {
+      nav.classList.toggle('active', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
     }
 
-    document.querySelector('.hamburger')?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') toggleMenu();
+    function toggleMenu() {
+      setMenuOpen(!nav.classList.contains('active'));
+    }
+
+    // Ensure collapsed on load (in case of cached DOM state)
+    setMenuOpen(false);
+
+    hamburger.addEventListener('click', toggleMenu);
+
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      }
+      if (e.key === 'Escape') setMenuOpen(false);
     });
 
+    // Close menu after clicking a nav link (mobile)
     document.querySelectorAll('#main-nav a').forEach((a) => {
-      a.addEventListener('click', () => {
-        document.getElementById('main-nav').classList.remove('active');
-      });
+      a.addEventListener('click', () => setMenuOpen(false));
     });
 
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const clickedInsideHeader = e.target.closest('header');
+      if (!clickedInsideHeader) setMenuOpen(false);
+    });
+
+    // Close on Escape anywhere
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    });
+
+    // --- Email obfuscation ---
     (function injectEmail() {
       const user = 'pktcraftscontact';
       const domain = 'gmail.com';
@@ -230,8 +296,10 @@
       document.getElementById('email').innerHTML = emailLink;
     })();
 
+    // --- Footer year ---
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // --- Gallery + Lightbox ---
     const gallery = document.getElementById('gallery-grid');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = lightbox.querySelector('img');
