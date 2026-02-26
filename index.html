@@ -35,7 +35,6 @@
       background-color: #333;
     }
 
-    /* Desktop nav unchanged */
     .main-nav {
       display: flex;
       gap: 2rem;
@@ -105,17 +104,13 @@
       flex-wrap: wrap;
     }
 
-    /* MOBILE ONLY */
     @media (max-width: 768px) {
-      /* 1) Menu hidden by default; shown only when .active is added */
       .main-nav {
         display: none;
         flex-direction: column;
         width: 100%;
         gap: 1rem;
         margin-top: 1rem;
-
-        /* 2) Center all menu items */
         align-items: center;
         text-align: center;
       }
@@ -124,7 +119,6 @@
       .hamburger { display: flex; }
       .logo { height: 50px; }
 
-      /* Social icons centered on their own row, like menu items */
       .social-icons {
         width: 100%;
         justify-content: center;
@@ -136,6 +130,11 @@
       .contact-container { flex-direction: column; }
     }
   </style>
+
+  <!-- GoatCounter Analytics -->
+  <script data-goatcounter="https://pktcrafts.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+
 </head>
 
 <body>
@@ -208,25 +207,21 @@
   </footer>
 
   <script>
-    // --- Menu (mobile opens/closes via .active) ---
     function toggleMenu() {
       const nav = document.getElementById('main-nav');
       nav.classList.toggle('active');
     }
 
-    // Allow Enter/Space on hamburger
     document.querySelector('.hamburger')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') toggleMenu();
     });
 
-    // Close mobile menu after clicking any nav link
     document.querySelectorAll('#main-nav a').forEach((a) => {
       a.addEventListener('click', () => {
         document.getElementById('main-nav').classList.remove('active');
       });
     });
 
-    // --- Email obfuscation ---
     (function injectEmail() {
       const user = 'pktcraftscontact';
       const domain = 'gmail.com';
@@ -235,10 +230,8 @@
       document.getElementById('email').innerHTML = emailLink;
     })();
 
-    // --- Footer year ---
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Gallery + Lightbox ---
     const gallery = document.getElementById('gallery-grid');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = lightbox.querySelector('img');
