@@ -1,4 +1,3 @@
-```html id="op1mzu"
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -20,235 +19,101 @@
       color:white;
     }
 
-    header{
-      background:#b71c1c;
-      padding:20px;
-      text-align:center;
-      position:sticky;
-      top:0;
-      z-index:1000;
-      box-shadow:0 2px 10px rgba(0,0,0,0.4);
-    }
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 2rem;
+  background:#b71c1c;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
 
-    .logo{
-      width:220px;
-      max-width:85%;
-      margin-bottom:15px;
-    }
+.logo{
+  height:80px;
+}
 
-    nav{
-      margin-top:10px;
-    }
+.main-nav{
+  display:flex;
+  gap:2rem;
+  margin-left:auto;
+  align-items:center;
+}
 
-    nav a{
-      color:white;
-      text-decoration:none;
-      margin:0 15px;
-      font-weight:bold;
-      transition:0.2s;
-    }
+.main-nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.2s;
+}
 
-    nav a:hover{
-      color:#ffcc00;
-    }
+.main-nav a:hover{
+  color:#ffcc00;
+}
 
-    .hero{
-      height:450px;
-      background:
-        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop')
-        center/cover;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  cursor:pointer;
+}
 
-    .hero h2{
-      background:rgba(0,0,0,0.7);
-      padding:25px 35px;
-      border-radius:14px;
-      font-size:3rem;
-      max-width:90%;
-    }
+.hamburger div{
+  width:25px;
+  height:3px;
+  background:white;
+}
 
-    section{
-      padding:60px 10%;
-    }
+@media(max-width:768px){
 
-    h3{
-      margin-bottom:35px;
-      font-size:2.2rem;
-      color:#ffcc00;
-      text-align:center;
-    }
+  header{
+    padding:0.75rem 1rem;
+  }
 
-    .menu-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:30px;
-    }
+  .logo{
+    height:55px;
+  }
 
-    .menu-item{
-      background:#1c1c1c;
-      border-radius:16px;
-      overflow:hidden;
-      transition:0.3s;
-      box-shadow:0 4px 15px rgba(0,0,0,0.4);
-    }
+  .hamburger{
+    display:flex;
+  }
 
-    .menu-item:hover{
-      transform:translateY(-6px);
-    }
+  .main-nav{
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
 
-    .menu-item img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-    }
+    display:flex;
+    flex-direction:column;
 
-    .menu-content{
-      padding:22px;
-    }
+    background:#b71c1c;
 
-    .menu-content h4{
-      margin-bottom:10px;
-      font-size:1.5rem;
-    }
+    overflow:hidden;
 
-    .menu-content p{
-      color:#ddd;
-      line-height:1.5;
-    }
+    max-height:0;
 
-    .price{
-      color:#ffcc00;
-      font-size:1.3rem;
-      margin-top:14px;
-      display:block;
-      font-weight:bold;
-    }
+    transition:max-height 0.25s ease;
 
-    .contact-box{
-      background:#1c1c1c;
-      padding:35px;
-      border-radius:16px;
-      line-height:2;
-      max-width:700px;
-      margin:auto;
-      box-shadow:0 4px 15px rgba(0,0,0,0.4);
-    }
+    gap:1rem;
 
-    footer{
-      background:#000;
-      padding:25px;
-      text-align:center;
-      margin-top:50px;
-      color:#aaa;
-    }
+    padding:0 1rem;
 
-    .status-open{
-      color:#4caf50;
-      font-weight:bold;
-    }
+    margin:0;
 
-    .status-closed{
-      color:#ff5252;
-      font-weight:bold;
-    }
+    text-align:center;
+  }
 
-    .admin-button{
-      position:fixed;
-      bottom:20px;
-      right:20px;
-      background:#ffcc00;
-      color:black;
-      padding:12px 18px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:bold;
-      z-index:3000;
-    }
+  .main-nav.active{
+    max-height:300px;
 
-    .modal{
-      display:none;
-      position:fixed;
-      z-index:4000;
-      left:0;
-      top:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,0.88);
-      justify-content:center;
-      align-items:center;
-    }
+    padding-top:1rem;
+    padding-bottom:1rem;
+  }
 
-    .modal-content{
-      background:#1c1c1c;
-      padding:30px;
-      width:90%;
-      max-width:550px;
-      border-radius:16px;
-    }
-
-    .modal-content h2{
-      margin-bottom:20px;
-    }
-
-    .modal-content input{
-      width:100%;
-      padding:14px;
-      margin-bottom:15px;
-      border:none;
-      border-radius:8px;
-    }
-
-    .modal-content button{
-      width:100%;
-      padding:14px;
-      border:none;
-      background:#ffcc00;
-      font-weight:bold;
-      border-radius:8px;
-      cursor:pointer;
-    }
-
-    .admin-panel{
-      display:none;
-      margin-top:25px;
-    }
-
-    .admin-panel textarea{
-      width:100%;
-      height:180px;
-      padding:15px;
-      border-radius:8px;
-      margin-bottom:15px;
-    }
-
-    .close{
-      float:right;
-      cursor:pointer;
-      font-size:28px;
-    }
-
-    @media(max-width:768px){
-
-      .hero{
-        height:350px;
-      }
-
-      .hero h2{
-        font-size:2rem;
-      }
-
-      section{
-        padding:50px 6%;
-      }
-
-    }
-
+}
   </style>
 </head>
 
@@ -256,13 +121,31 @@
 
 <header>
 
-  <img
-    src="images/vinus.jpg"
-    alt="Vinus Pizza & Kebab Logo"
-    class="logo"
-  >
+  <a href="#">
+    <img
+      src="images/vinus.jpg"
+      alt="Vinus Pizza & Kebab Logo"
+      class="logo"
+    >
+  </a>
 
-  <nav>
+  <div
+    class="hamburger"
+    id="hamburger"
+    aria-label="Open menu"
+    role="button"
+    tabindex="0"
+    aria-expanded="false"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav
+    class="main-nav"
+    id="main-nav"
+  >
     <a href="#menu">Meny</a>
     <a href="#contact">Kontakt</a>
   </nav>
@@ -489,89 +372,92 @@
 
   function updateOpenStatus(){
 
-    const now = new Date();
+    const nav =
+  document.getElementById('main-nav');
 
-    const day = now.getDay();
+const hamburger =
+  document.getElementById('hamburger');
 
-    const hour = now.getHours();
+function setMenuOpen(isOpen){
 
-    const minute = now.getMinutes();
+  nav.classList.toggle(
+    'active',
+    isOpen
+  );
 
-    const currentTime =
-      hour + (minute / 60);
+  hamburger.setAttribute(
+    'aria-expanded',
+    String(isOpen)
+  );
+}
 
-    let open = false;
+function toggleMenu(){
 
-    let nextOpen = "";
+  setMenuOpen(
+    !nav.classList.contains('active')
+  );
+}
 
-    if(day === 0){
+setMenuOpen(false);
 
-      open =
-        currentTime >= 12 &&
-        currentTime < 22;
+hamburger.addEventListener(
+  'click',
+  toggleMenu
+);
 
-      nextOpen =
-        "Mandag kl. 11:00";
+hamburger.addEventListener(
+  'keydown',
+  (e) => {
+
+    if(e.key === 'Enter' ||
+       e.key === ' '){
+
+      e.preventDefault();
+
+      toggleMenu();
     }
 
-    else if(day >= 1 && day <= 5){
+    if(e.key === 'Escape'){
 
-      open =
-        currentTime >= 11 &&
-        currentTime < 22;
-
-      if(!open){
-
-        if(currentTime < 11){
-
-          nextOpen =
-            "I dag kl. 11:00";
-
-        } else {
-
-          const nextDayNames = [
-            "Mandag",
-            "Tirsdag",
-            "Onsdag",
-            "Torsdag",
-            "Fredag",
-            "Lørdag",
-            "Søndag"
-          ];
-
-          nextOpen =
-            nextDayNames[day] +
-            " kl. 11:00";
-        }
-      }
-    }
-
-    else if(day === 6){
-
-      open =
-        currentTime >= 12 &&
-        currentTime < 22;
-
-      nextOpen =
-        "Søndag kl. 12:00";
-    }
-
-    const statusElement =
-      document.getElementById("openStatus");
-
-    if(open){
-
-      statusElement.innerHTML =
-        "<span class='status-open'>Åpent nå</span>";
-
-    } else {
-
-      statusElement.innerHTML =
-        "<span class='status-closed'>Stengt — åpner igjen: " +
-        nextOpen +
-        "</span>";
+      setMenuOpen(false);
     }
   }
+);
+
+document
+  .querySelectorAll('#main-nav a')
+  .forEach((a) => {
+
+    a.addEventListener(
+      'click',
+      () => setMenuOpen(false)
+    );
+  });
+
+document.addEventListener(
+  'click',
+  (e) => {
+
+    const clickedInsideHeader =
+      e.target.closest('header');
+
+    if(!clickedInsideHeader){
+
+      setMenuOpen(false);
+    }
+  }
+);
+
+document.addEventListener(
+  'keydown',
+  (e) => {
+
+    if(e.key === 'Escape'){
+
+      setMenuOpen(false);
+    }
+  }
+);
 
   updateOpenStatus();
 
