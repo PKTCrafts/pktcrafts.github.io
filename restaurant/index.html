@@ -1,11 +1,13 @@
+```html id="op1mzu"
 <!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StreetBite Burger</title>
+  <title>Vinus Pizza & Kebab</title>
 
   <style>
+
     *{
       margin:0;
       padding:0;
@@ -19,16 +21,19 @@
     }
 
     header{
-      background:#c62828;
+      background:#b71c1c;
       padding:20px;
       text-align:center;
       position:sticky;
       top:0;
       z-index:1000;
+      box-shadow:0 2px 10px rgba(0,0,0,0.4);
     }
 
-    header h1{
-      font-size:2.5rem;
+    .logo{
+      width:220px;
+      max-width:85%;
+      margin-bottom:15px;
     }
 
     nav{
@@ -40,11 +45,19 @@
       text-decoration:none;
       margin:0 15px;
       font-weight:bold;
+      transition:0.2s;
+    }
+
+    nav a:hover{
+      color:#ffcc00;
     }
 
     .hero{
-      height:400px;
-      background:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1400&auto=format&fit=crop') center/cover;
+      height:450px;
+      background:
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
+        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop')
+        center/cover;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -53,9 +66,10 @@
 
     .hero h2{
       background:rgba(0,0,0,0.7);
-      padding:20px 30px;
-      border-radius:10px;
+      padding:25px 35px;
+      border-radius:14px;
       font-size:3rem;
+      max-width:90%;
     }
 
     section{
@@ -63,63 +77,84 @@
     }
 
     h3{
-      margin-bottom:30px;
-      font-size:2rem;
+      margin-bottom:35px;
+      font-size:2.2rem;
       color:#ffcc00;
+      text-align:center;
     }
 
     .menu-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:30px;
     }
 
     .menu-item{
       background:#1c1c1c;
-      border-radius:12px;
+      border-radius:16px;
       overflow:hidden;
       transition:0.3s;
+      box-shadow:0 4px 15px rgba(0,0,0,0.4);
     }
 
     .menu-item:hover{
-      transform:translateY(-5px);
+      transform:translateY(-6px);
     }
 
     .menu-item img{
       width:100%;
-      height:200px;
+      height:220px;
       object-fit:cover;
     }
 
     .menu-content{
-      padding:20px;
+      padding:22px;
     }
 
     .menu-content h4{
       margin-bottom:10px;
-      font-size:1.4rem;
+      font-size:1.5rem;
+    }
+
+    .menu-content p{
+      color:#ddd;
+      line-height:1.5;
     }
 
     .price{
       color:#ffcc00;
-      font-size:1.2rem;
-      margin-top:10px;
+      font-size:1.3rem;
+      margin-top:14px;
       display:block;
       font-weight:bold;
     }
 
     .contact-box{
       background:#1c1c1c;
-      padding:30px;
-      border-radius:12px;
+      padding:35px;
+      border-radius:16px;
       line-height:2;
+      max-width:700px;
+      margin:auto;
+      box-shadow:0 4px 15px rgba(0,0,0,0.4);
     }
 
     footer{
       background:#000;
-      padding:20px;
+      padding:25px;
       text-align:center;
       margin-top:50px;
+      color:#aaa;
+    }
+
+    .status-open{
+      color:#4caf50;
+      font-weight:bold;
+    }
+
+    .status-closed{
+      color:#ff5252;
+      font-weight:bold;
     }
 
     .admin-button{
@@ -133,19 +168,18 @@
       border-radius:10px;
       cursor:pointer;
       font-weight:bold;
+      z-index:3000;
     }
-
-    /* LOGIN MODAL */
 
     .modal{
       display:none;
       position:fixed;
-      z-index:2000;
+      z-index:4000;
       left:0;
       top:0;
       width:100%;
       height:100%;
-      background:rgba(0,0,0,0.85);
+      background:rgba(0,0,0,0.88);
       justify-content:center;
       align-items:center;
     }
@@ -154,8 +188,8 @@
       background:#1c1c1c;
       padding:30px;
       width:90%;
-      max-width:500px;
-      border-radius:15px;
+      max-width:550px;
+      border-radius:16px;
     }
 
     .modal-content h2{
@@ -164,7 +198,7 @@
 
     .modal-content input{
       width:100%;
-      padding:12px;
+      padding:14px;
       margin-bottom:15px;
       border:none;
       border-radius:8px;
@@ -172,7 +206,7 @@
 
     .modal-content button{
       width:100%;
-      padding:12px;
+      padding:14px;
       border:none;
       background:#ffcc00;
       font-weight:bold;
@@ -187,7 +221,7 @@
 
     .admin-panel textarea{
       width:100%;
-      height:120px;
+      height:180px;
       padding:15px;
       border-radius:8px;
       margin-bottom:15px;
@@ -196,106 +230,184 @@
     .close{
       float:right;
       cursor:pointer;
-      font-size:24px;
+      font-size:28px;
     }
 
     @media(max-width:768px){
+
+      .hero{
+        height:350px;
+      }
+
       .hero h2{
         font-size:2rem;
       }
+
+      section{
+        padding:50px 6%;
+      }
+
     }
+
   </style>
 </head>
 
 <body>
 
 <header>
-  <h1>StreetBite Burger</h1>
+
+  <img
+    src="images/vinus.jpg"
+    alt="Vinus Pizza & Kebab Logo"
+    class="logo"
+  >
 
   <nav>
     <a href="#menu">Meny</a>
     <a href="#contact">Kontakt</a>
   </nav>
+
 </header>
 
 <section class="hero">
-  <h2>Fresh Burgers. Fast Service.</h2>
+  <h2>
+    Vinus Pizza & Kebab
+  </h2>
 </section>
 
 <section id="menu">
+
   <h3>Vår Meny</h3>
 
   <div class="menu-grid" id="menuContainer">
 
     <div class="menu-item">
-      <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop">
+      <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1200&auto=format&fit=crop">
+
       <div class="menu-content">
-        <h4>Classic Burger</h4>
-        <p>Saftig burger med cheddar og bacon.</p>
-        <span class="price">149 kr</span>
+        <h4>Pizza Special</h4>
+
+        <p>
+          Klassisk italiensk pizza med ferske råvarer.
+        </p>
+
+        <span class="price">
+          199 kr
+        </span>
       </div>
     </div>
 
     <div class="menu-item">
-      <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=1200&auto=format&fit=crop">
+      <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=1200&auto=format&fit=crop">
+
       <div class="menu-content">
-        <h4>Loaded Fries</h4>
-        <p>Pommes med ost, bacon og dressing.</p>
-        <span class="price">89 kr</span>
+        <h4>Kebabtallerken</h4>
+
+        <p>
+          Kebab med pommes frites, salat og dressing.
+        </p>
+
+        <span class="price">
+          169 kr
+        </span>
       </div>
     </div>
 
     <div class="menu-item">
-      <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=1200&auto=format&fit=crop">
+      <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop">
+
       <div class="menu-content">
-        <h4>Chicken Wrap</h4>
-        <p>Sprø kylling med spicy saus.</p>
-        <span class="price">119 kr</span>
+        <h4>Burger Meny</h4>
+
+        <p>
+          Saftig burger med ost, pommes frites og brus.
+        </p>
+
+        <span class="price">
+          179 kr
+        </span>
       </div>
     </div>
 
   </div>
+
 </section>
 
 <section id="contact">
+
   <h3>Kontakt Oss</h3>
 
   <div class="contact-box">
-    <p><strong>Adresse:</strong> Burgergata 15, Oslo</p>
-    <p><strong>Telefon:</strong> +47 99 99 99 99</p>
-    <p><strong>Email:</strong> kontakt@streetbite.no</p>
-    <p><strong>Åpningstider:</strong> 10:00 - 23:00</p>
+
+    <p>
+      <strong>Vinus Pizza & Kebab</strong>
+    </p>
+
+    <p>
+      <strong>Telefon:</strong>
+      69 28 33 00
+    </p>
+
+    <p>
+      <strong>Email:</strong>
+      vinuspizza@gmail.com
+    </p>
+
+    <p>
+      <strong>Adresse:</strong>
+      Mosseveien 16, Råde, Norway
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      <span id="openStatus"></span>
+    </p>
+
   </div>
+
 </section>
 
 <footer>
-  © 2026 StreetBite Burger
+  © 2026 Vinus Pizza & Kebab
 </footer>
 
 <button class="admin-button" onclick="openModal()">
   Admin Login
 </button>
 
-<!-- LOGIN MODAL -->
-
 <div class="modal" id="loginModal">
 
   <div class="modal-content">
 
-    <span class="close" onclick="closeModal()">&times;</span>
+    <span class="close" onclick="closeModal()">
+      &times;
+    </span>
 
     <h2>Restaurant Login</h2>
 
-    <input type="text" id="username" placeholder="Brukernavn">
-    <input type="password" id="password" placeholder="Passord">
+    <input
+      type="text"
+      id="username"
+      placeholder="Brukernavn"
+    >
 
-    <button onclick="login()">Logg inn</button>
+    <input
+      type="password"
+      id="password"
+      placeholder="Passord"
+    >
+
+    <button onclick="login()">
+      Logg inn
+    </button>
 
     <div class="admin-panel" id="adminPanel">
 
       <h2>Oppdater Meny</h2>
 
-      <p>Rediger HTML direkte:</p>
+      <p>
+        Rediger HTML direkte:
+      </p>
 
       <textarea id="menuEditor"></textarea>
 
@@ -314,37 +426,48 @@
   const ADMIN_USER = "admin";
   const ADMIN_PASS = "1234";
 
-  const menuContainer = document.getElementById("menuContainer");
-
-  // LASTER LAGRET MENY
+  const menuContainer =
+    document.getElementById("menuContainer");
 
   if(localStorage.getItem("restaurantMenu")){
-    menuContainer.innerHTML = localStorage.getItem("restaurantMenu");
+
+    menuContainer.innerHTML =
+      localStorage.getItem("restaurantMenu");
   }
 
   function openModal(){
-    document.getElementById("loginModal").style.display = "flex";
+
+    document.getElementById("loginModal")
+      .style.display = "flex";
   }
 
   function closeModal(){
-    document.getElementById("loginModal").style.display = "none";
+
+    document.getElementById("loginModal")
+      .style.display = "none";
   }
 
   function login(){
 
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+    const user =
+      document.getElementById("username").value;
 
-    if(user === ADMIN_USER && pass === ADMIN_PASS){
+    const pass =
+      document.getElementById("password").value;
 
-      document.getElementById("adminPanel").style.display = "block";
+    if(user === ADMIN_USER &&
+       pass === ADMIN_PASS){
 
-      document.getElementById("menuEditor").value =
-        menuContainer.innerHTML;
+      document.getElementById("adminPanel")
+        .style.display = "block";
+
+      document.getElementById("menuEditor")
+        .value = menuContainer.innerHTML;
 
       alert("Innlogging vellykket");
 
     } else {
+
       alert("Feil brukernavn eller passord");
     }
   }
@@ -364,7 +487,96 @@
     alert("Meny oppdatert!");
   }
 
+  function updateOpenStatus(){
+
+    const now = new Date();
+
+    const day = now.getDay();
+
+    const hour = now.getHours();
+
+    const minute = now.getMinutes();
+
+    const currentTime =
+      hour + (minute / 60);
+
+    let open = false;
+
+    let nextOpen = "";
+
+    if(day === 0){
+
+      open =
+        currentTime >= 12 &&
+        currentTime < 22;
+
+      nextOpen =
+        "Mandag kl. 11:00";
+    }
+
+    else if(day >= 1 && day <= 5){
+
+      open =
+        currentTime >= 11 &&
+        currentTime < 22;
+
+      if(!open){
+
+        if(currentTime < 11){
+
+          nextOpen =
+            "I dag kl. 11:00";
+
+        } else {
+
+          const nextDayNames = [
+            "Mandag",
+            "Tirsdag",
+            "Onsdag",
+            "Torsdag",
+            "Fredag",
+            "Lørdag",
+            "Søndag"
+          ];
+
+          nextOpen =
+            nextDayNames[day] +
+            " kl. 11:00";
+        }
+      }
+    }
+
+    else if(day === 6){
+
+      open =
+        currentTime >= 12 &&
+        currentTime < 22;
+
+      nextOpen =
+        "Søndag kl. 12:00";
+    }
+
+    const statusElement =
+      document.getElementById("openStatus");
+
+    if(open){
+
+      statusElement.innerHTML =
+        "<span class='status-open'>Åpent nå</span>";
+
+    } else {
+
+      statusElement.innerHTML =
+        "<span class='status-closed'>Stengt — åpner igjen: " +
+        nextOpen +
+        "</span>";
+    }
+  }
+
+  updateOpenStatus();
+
 </script>
 
 </body>
 </html>
+```
